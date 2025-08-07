@@ -1,0 +1,245 @@
+/* Set up your elemental and default items.
+Format is:
+["weapon type",
+  ["element", "item1 mods", "item2 mods"], etc]
+Mods should be written exactly as in game, so
+they will be equipped correctly.
+Default items are used if you don't have a
+correct element against the foe, or if it's a
+non-elemental foe. Default items should be
+written as full names.
+List items for the particular element in the
+order from the best to the worst. You can omit
+whole elements and weapon types if you don't
+want the script to use them. */
+var elemental_items = [
+  ["hammer",
+    ["aether", "D",],
+    ["poison", "D+8", "D+7"],
+    ["ice", "D"],
+    ["default",
+     "stone hammer +7", "aether hammer D"],
+  ],
+  ["wand",
+    ["vigor", "D+8", "D+7"],
+    ["default",
+    "vigor wand D+8", "vigor wand D+7"],
+  ],
+  ["staff",
+    ["aether", "dU"]
+  ],
+  ["crossbow",
+    ["poison", "dP"],
+    ["fire", "dF"],
+    ["ice", "dI"],
+  ],
+  ["sword",
+    ["aether", "dU+9","dU+8"],
+    ["fire", "D+7", "dF"],
+    ["ice", "dI"],
+    ["poison", "dP", "D"],
+    ["vigor", "D", "dL+10", "dL+9"],
+    ["default",
+     "aether sword dU+9", "aether sword dU+8",
+     "vigor sword dL", "poison sword D"],
+  ],
+  ["shield",
+    ["vigor", "A"],
+    ["poison", "A"],
+    ["ice", "A"],
+    ["aether", "A"],
+    ["fire", "A"],
+    ["default", "compound"],
+  ],
+]
+/* These non-elemental items can be used as
+weapon types in the lists below. */
+var special_weapons = ["bardiche", "blade",
+"heavy hammer", "repeater", "arm"]
+
+/* Weapon type priority for single targets:
+1. First type + foe's weak element.
+2. Default weapon of the first type.
+3. Second type + foe's weak element.
+4. Continue 1-3 until a weapon is found.
+If a weapon type isn't listed here, it will not
+be used. */
+var for_melee_single_target = [
+  "sword", "hammer",
+]
+
+/* If true, then script can use dX weapons for
+dps purposes if you don't have a D weapon of
+that element. */
+var use_mods_for_dmg = true
+
+/* How many regular enemies are needed to start
+using AoE weapons instead of single target. */
+var aoe_treshold = 4
+
+/* Weapons to use for melee AoE, same priority
+logic as the regular melee. */
+var for_melee_aoe = [
+"arm", "heavy hammer", "bardiche", "big sword",
+]
+
+/* If this is set to `true`, script will prefer
+to use ranged items from lists below instead of
+melee. */
+var prefer_ranged = false
+
+/* Will prefer ranged weapons only for these
+enemies, but will try to get in melee if they
+are near */
+var prefer_ranged_foes = []
+
+/* Will exclusively use single-target ranged
+against these enemies */
+var must_ranged_foes = ["wasp", "wasp nest",
+"mosquito", "huge mosquito"]
+
+/* Used for scripted bosses, for `ranged_foes`,
+or when `prefer_ranged` is true. */
+var for_ranged_single_target = ["crossbow",
+"repeating","wand", ]
+
+/* Enable this _only_ if you have 10* repeating
+crossbow without attack speed enchant.
+Increases effective attack speed. */
+var enable_repeating_aac = true
+
+/* Weapons to use for ranged AoE. Ranged AoE is
+triggered by the same threshold as melee AoE.*/
+var for_ranged_aoe = ["wand", "staff"]
+
+/* Weapons to use against `immune_to_physical`
+enemies. */
+var for_phys_immune = ["wand", "staff"]
+
+/* Full name of the shield with the highest
+evade%, will be used to block big boss attacks
+*/
+var evade_shield = "vigor shield ah"
+
+/* Script will try to stunlock these enemies
+instead of using any other tactics. Supported:
+poena, ceiling decorator, ice elemental. */
+var do_stunlock = [
+  "poena", "ceiling decorator", "ice elemental"
+]
+
+// Full names of weapons to use for stunlocking
+var stunlock_weapons = [
+  "aether hammer D", "stone hammer +7"]
+
+/* How much HP a non-boss enemy must have
+to use dU weapons on it instead of other
+tactics. If 0, will not specifically unmake. */
+var unmaking_threshold = 600
+
+/* When to debuff bosses:
+"never", "always", or "smite" (only if Smite
+buff is active). */
+var debuff_bosses = "always"
+
+/* When to debuff regular enemies:
+"never", "always", or "smite" (only if Smite
+buff is active). */
+var debuff_non_bosses = "smite"
+
+/* If item is not listed here, its `R` ability
+won't be used. Supported: dash, bash,
+bardiche, hammer, blade, skeleton_arm, mask,
+quarterstaff, fire_talisman, cinderwisp. */
+var useable_abilities = ["dash", "bash",
+"skeleton_arm", "mask", "blade", "hammer",
+"fire_talisman", "bardiche", "quarterstaff",
+// "cinderwisp" // will spend your fire runes
+]
+
+/* Advanced: these are default values, change
+them accordingly if you have speed enchants on
+these weapons. */
+var hammer_frames = 15
+var bardiche_frames = 30
+
+/* `dmg * (crit_mult + base_crit_mult)`,
+script won't use the bardiche ability if
+non-boss's HP is lower than twice this damage*/
+var bardiche_dmg = 52 * (7.6 + 2)
+
+/* Use scripted potions for bosses. */
+var use_potions_for_bosses = true
+
+/* Drink crit/speed potion right at the start
+of phase1 of these boss fights. Overrides
+default logic that prefers to drink during the
+"hardest" phase. Supported: xylo,
+mushrooms, pallas, bronze, naga. The rest
+already drink the potion in phase1. */
+var fast_potion_bosses = [
+  "xylo", "mushrooms", "pallas",
+]
+
+/* Fraction of HP to consider low. When on low
+HP, will prioritize `ah` shield and `dL` weapon
+over foe's elemental weakness.
+If 1, will always try to lifesteal to max
+  (useful for clearing zones with full HP).
+If 0, will never force lifesteal. */
+var low_hp_threshold = 0.5
+
+/* Switch to 1h+shield against non-boss foes
+when `low_hp_threshold` is reached */
+var use_shield_on_low_hp = true
+
+// Choose amount based on your `dI` weapon
+var max_chill_stacks = 6
+
+/* When to use Cinder ability (if listed in
+`useable_abilities`). Will use at max_stacks,
+or if boss's HP is lower than stacks * dmg. */
+var max_ignition_stacks = 10
+var cinderwisp_dmg = 24
+
+/* At least this many enemies must be present
+to use Smite ability. */
+var smite_treshold = 7
+
+// Depends on level/enchants of your BFG.
+var smite_damage = 85
+
+// Enable smiting two screens at once
+var long_long_smite = true
+
+/* If you're doing the "kill unique
+foes" step of the Blade of the Fallen God quest,
+fill this array with names of the
+enemies you've already defeated. */
+var bfg_defeated_foes = ["Bolesh"]
+
+/* Set to true if you're doing Skeleton Arm
+quests. Prioritizes last-hitting foes with the
+Arm ability */
+var pickpocket_quest = true
+
+// These depend on level/enchants of the Arm
+var arm_damage = 44
+var max_pickpocket_stacks = 3
+
+/* Cultist Mask quests.
+"simple" - steps 1 and 3 (uses on CD)
+"prevent" - step 4: do it in Rocky. Script
+will approach the scout, use mask, get hit as
+long as the debuff lasts, and quit the zone. */
+var mask_quest = true
+
+// Show ability cooldowns in UI
+var ui_show_cd = true
+
+// Show your buffs/debuffs in UI
+var ui_show_statuses = true
+
+// Debug (noisy, useful for research)
+var ui_show_debug = false
+
