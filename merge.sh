@@ -41,7 +41,7 @@ regex_replace_file() {
     local filename="$1"
     local pattern="$2"
     local replacement="$3"
-    python3  regex_replace.py  "${filename}"  "${pattern}"  "${replacement}" 
+    python  regex_replace.py  "${filename}"  "${pattern}"  "${replacement}" 
     log INFO "regex replace: \"${filename}\" -- \"${pattern}\" -> \"${replacement}\""
 }
 

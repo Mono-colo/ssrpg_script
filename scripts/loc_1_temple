@@ -4,7 +4,7 @@
 
   AAC()   
   ?summon_talisman(aether)
-    loadout 6
+    loadout ice_heavy_cross
     ?foe = boss
       loadout 4
 

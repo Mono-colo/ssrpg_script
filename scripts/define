@@ -1,19 +1,19 @@
 ///////////////////    武器    ///////////////////
 //属性短剑(附魔攻速)*2
-var poison1 = "poison sword D -shiny *10 +9"
-var poison2 = "poison sword D -shiny *10 +7"
+var poison1 = "poison sword D -shiny -long *10 +11"
+var poison2 = "poison sword D -shiny -long *10 +7"
 
-var vigor1 = "vigor sword D -shiny *10 +9"
-var vigor2 = "vigor sword D -shiny *10 +7"
+var vigor1 = "vigor sword D -shiny -long *10 +9"
+var vigor2 = "vigor sword D -shiny -long *10 +8"
 
-var aether1 = "aether sword D -shiny *10 +9"
-var aether2 = "aether sword D -shiny *10 +7"
+var aether1 = "aether sword D -shiny -long *10 +9"
+var aether2 = "aether sword D -shiny -long *10 +7"
 
-var fire1 = "fire sword D -shiny *10 +8"
-var fire2 = "fire sword D -shiny *10 +7"
+var fire1 = "fire sword D -shiny -long *10 +8"
+var fire2 = "fire sword D -shiny -long *10 +7"
 
-var ice1 = "ice sword D -shiny *10 +8"
-var ice2 = "ice sword D -shiny *10 +7"
+var ice1 = "ice sword D -shiny -long *10 +8"
+var ice2 = "ice sword D -shiny -long *10 +7"
 //var poison1 = "poison sword D shiny -long"
 //var poison2 = "poison sword D -shiny -long"
 
@@ -30,20 +30,20 @@ var ice2 = "ice sword D -shiny *10 +7"
 //var ice2 = "ice sword D -shiny -long"
 
 //毒 dP 短剑 *10 +21
-var dP = "poison sword dP -shiny *10 +7"
+var dP = "poison sword dP -shiny -long *10 +7"
 
 //活力 dL 短剑 *10 +21 *2
-var dL1 = "vigor sword dL -shiny *10 +7"
-var dL2 = "vigor sword dL -shiny *10 +5"
+var dL1 = "vigor sword dL -shiny -long *10 +8"
+var dL2 = "vigor sword dL -shiny -long *10 +7"
 //var dL1 = "vigor sword dL shiny -long"
 //var dL2 = "vigor sword dL -shiny -long"
 
 //冰 dI 短剑 *10 +21
-var dI = "ice sword dI -shiny *10 +7"
+var dI = "ice sword dI -shiny -long *10 +7"
 
 // 弩
-var cross1 = "crossbow"
-var cross2 = "crossbow"
+var cross1 = "crossbow *10 +12"
+var cross2 = "crossbow *10 +11" 
 
 // 属性重弩
 var poison_heavy_cross = "poison heavy_crossbow"

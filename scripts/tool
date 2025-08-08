@@ -165,13 +165,14 @@ func activate_potion_flow_health(health)
 // 载入外观 mod
 import_appearances_modle()
 
->`0,10, foe.dis    = @foe.distance@
->`0,11, staff      = @item.GetCooldown(＂quarterstaff＂)@
->`0,12, dash       = @item.GetCooldown(＂dash＂)@
->`0,13, bash       = @item.GetCooldown(＂bash＂)@
->`0,14, State:Time = @foe.state@:@foe.time@
+>`0,11, foe.dis    = @foe.distance@
+>`0,12, staff      = @item.GetCooldown(＂quarterstaff＂)@
+>`0,13, dash       = @item.GetCooldown(＂dash＂)@
+>`0,14, bash       = @item.GetCooldown(＂bash＂)@
+>`0,15, mind       = @item.GetCooldown(＂mind＂)@
+>`0,16, State:Time = @foe.state@:@foe.time@
 
->`0,23, #white,My buffs: @buffs.string@
+>`0,23,#white, My buffs: @buffs.string@
 
 
 

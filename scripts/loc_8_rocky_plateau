@@ -20,13 +20,13 @@
    :
     attack_stackPotion() 
   :
-   ?foe = "phase1"
+   ?foe = phase1
     boss_1()
-   :?foe = "phase2"
+   :?foe = phase2
     boss_2()
-   :?foe = "phase3"
+   :?foe = phase3
     boss_3()
-   :?foe = "boss"
+   :?foe = boss
     boss_0()
    :
     attack()
@@ -60,7 +60,14 @@ func run()
 ///////////////////    小怪    ///////////////////
 //高原沒有小怪, 直接跳過
 func attack()
- return
+  ?foe.distance <= 10
+    ?hp ! maxhp
+      selectEquip(dL1, dL2)
+    :
+      selectEquip(dP, dI)
+  :
+    bashSkill()
+  return
 
 func attack_stackPotion()
  return
@@ -147,74 +154,99 @@ func boss_2_stackPotion()
 
 ///////////////////   第3階段   ///////////////////
 func boss_3()
- //上一層冰後喝暴擊藥打傷害
- ?foe.distance <= 10
-  ?foe.hp = foe.maxhp
-   selectEquip("moon", dI)
-   return
-
-  ?item.potion ! "empty"
-   activate potion
-
-  ?timing(115, 60)
-    mindSkill()
-    return
-
-  //哪一對小劍傷害高就用那個
-  selectEquip(poison1, poison2)
-  ?hp ! maxhp
-   selectEquip(dL1, dL2)
- :
-  bashSkill()
-
-func boss_3_stackPotion()
  //攻擊循環+1 (0~5)
  ?(foe.state=32 | foe.state=115) & !foe.time
   nextAttackLoop(6)
 
- //擊晕
- ?attackLoop = 2 &
- ^timing(32, 27) &
- ^foe.distance < 8
-  mindSkill()
-  return
-
+ //放大就后退
+ ?timing(115, 58)
+  >`10,0, timing(115, 58)
+  ?mindSkill()
+   >`10,1, mindSkill()
+   mindSkill()
+   return
+  :
+   >`10,2, mindSkill()
+   selectEquip(cross1, cross2)
+   return
+    
+ //上一層冰後喝暴擊藥打傷害
  ?foe.distance <= 10
-  //大鎚技能削減盾量
-  ?attackLoop = 2 & timing(32, 12)
-   ?hammerSkill()
-    return
-
-  //boss普攻前上毒減傷
-  ?attackLoop ! 2 & timing(32, 39)
-   ?maskSkill()
-    return
-   ?needPoison()
-    selectEquip(dP, "mask")
-    return
-
-  //上冰
-  ?needIce()
-   selectEquip(dI, "mask")
+  >`10,3, foe.distance <= 10
+  ?foe.hp = foe.maxhp
+   >`10,4, foe.hp = foe.maxhp
+   selectEquip("moon", dI)
    return
 
-  ?!foe.buffs.GetCount(
-  ^"adaptive_defense_poison")
-   selectEquip(poison1, "mask")
-  :?!foe.buffs.GetCount(
-  ^"adaptive_defense_vigor")
-   selectEquip(vigor1, "mask")
-  :?!foe.buffs.GetCount(
-  ^"adaptive_defense_aether")
-   selectEquip(aether1, "mask")
-  :?!foe.buffs.GetCount(
-  ^"adaptive_defense_fire")
-   selectEquip(fire1, "mask")
-  :?!foe.buffs.GetCount(
-  ^"adaptive_defense_ice")
-   selectEquip(ice1, "mask")
+  ?item.potion ! "empty"
+   >`10,5, item.potion ! "empty"
+   activate potion
+
+  //大鎚技能削減盾量
+  ?attackLoop = 2 & timing(32, 12)
+   >`10,6, attackLoop = 2 & timing(32, 12)
+   ?hammerSkill()
+    >`10,7, hammerSkill()
+    return
+
+  //哪一對小劍傷害高就用那個
+  selectEquip(poison1, vigor1)
+  >`10,6, selectEquip(poison1, vigor1)
+  ?hp ! maxhp
+   >`10,7, hp ! maxhp selectEquip(dL1, dL2)
+   selectEquip(dL1, dL2)
  :
+  >`10,8, bashSkill()
   bashSkill()
+
+// func boss_3_stackPotion()
+//  //攻擊循環+1 (0~5)
+//  ?(foe.state=32 | foe.state=115) & !foe.time
+//   nextAttackLoop(6)
+
+//  //擊晕
+//  ?attackLoop = 2 &
+//  ^timing(32, 27) &
+//  ^foe.distance < 8
+//   mindSkill()
+//   return
+
+//  ?foe.distance <= 10
+//   //大鎚技能削減盾量
+//   ?attackLoop = 2 & timing(32, 12)
+//    ?hammerSkill()
+//     return
+
+//   //boss普攻前上毒減傷
+//   ?attackLoop ! 2 & timing(32, 39)
+//    ?maskSkill()
+//     return
+//    ?needPoison()
+//     selectEquip(dP, "mask")
+//     return
+
+//   //上冰
+//   ?needIce()
+//    selectEquip(dI, "mask")
+//    return
+
+//   ?!foe.buffs.GetCount(
+//   ^"adaptive_defense_poison")
+//    selectEquip(poison1, "mask")
+//   :?!foe.buffs.GetCount(
+//   ^"adaptive_defense_vigor")
+//    selectEquip(vigor1, "mask")
+//   :?!foe.buffs.GetCount(
+//   ^"adaptive_defense_aether")
+//    selectEquip(aether1, "mask")
+//   :?!foe.buffs.GetCount(
+//   ^"adaptive_defense_fire")
+//    selectEquip(fire1, "mask")
+//   :?!foe.buffs.GetCount(
+//   ^"adaptive_defense_ice")
+//    selectEquip(ice1, "mask")
+//  :
+//   bashSkill()
 
 
 ///////////////////   开局阶段   ///////////////////
