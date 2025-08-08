@@ -102,16 +102,16 @@ func boss_1()
  :
   bashSkill()
 
-func boss_1_stackPotion()
- ?foe.distance <= 10
-  ?needPoison()
-   selectEquip(dP, "mask")
-  :?needIce()
-   selectEquip(dI, "mask")
-  ://?hp ! maxhp
-   selectEquip(dL1, "mask")
- :
-  bashSkill()
+// func boss_1_stackPotion()
+//  ?foe.distance <= 10
+//   ?needPoison()
+//    selectEquip(dP, "mask")
+//   :?needIce()
+//    selectEquip(dI, "mask")
+//   ://?hp ! maxhp
+//    selectEquip(dL1, "mask")
+//  :
+//   bashSkill()
 
 ///////////////////   第2階段   ///////////////////
 func boss_2()
@@ -129,28 +129,28 @@ func boss_2()
  :
   bashSkill()
 
-func boss_2_stackPotion()
- ?foe.distance <= 10
-  ?foe = "poison"
-   selectEquip(ice1, "mask")
-  :?foe = "vigor"
-   selectEquip(poison1, "mask")
-  :?foe = "aether"
-   selectEquip(vigor1, "mask")
-  :?foe = "fire"
-   selectEquip(aether1, "mask")
-  :?foe = "ice"
-   selectEquip(fire1, "mask")
+// func boss_2_stackPotion()
+//  ?foe.distance <= 10
+//   ?foe = "poison"
+//    selectEquip(ice1, "mask")
+//   :?foe = "vigor"
+//    selectEquip(poison1, "mask")
+//   :?foe = "aether"
+//    selectEquip(vigor1, "mask")
+//   :?foe = "fire"
+//    selectEquip(aether1, "mask")
+//   :?foe = "ice"
+//    selectEquip(fire1, "mask")
 
-  //boss攻擊前根據需要上冰或者回血
-  ?foe.time < 30 + iceEffect()
-   ?hp ! maxhp
-    selectEquip(dL1, "mask")
-   ?!foe.buffs.GetCount("buff_protection")
-    ?needIce()
-     selectEquip(dI, "mask")
- :
-  bashSkill()
+//   //boss攻擊前根據需要上冰或者回血
+//   ?foe.time < 30 + iceEffect()
+//    ?hp ! maxhp
+//     selectEquip(dL1, "mask")
+//    ?!foe.buffs.GetCount("buff_protection")
+//     ?needIce()
+//      selectEquip(dI, "mask")
+//  :
+//   bashSkill()
 
 ///////////////////   第3階段   ///////////////////
 func boss_3()

@@ -23,7 +23,6 @@ log() {
   esac
 }
 
-
 remove_file() {
     local filename="$1"
     rm -f "${filename}"
@@ -41,10 +40,9 @@ regex_replace_file() {
     local filename="$1"
     local pattern="$2"
     local replacement="$3"
-    python  regex_replace.py  "${filename}"  "${pattern}"  "${replacement}" 
+    python  srcs/regex_replace.py  "${filename}"  "${pattern}"  "${replacement}" 
     log INFO "regex replace: \"${filename}\" -- \"${pattern}\" -> \"${replacement}\""
 }
-
 
 remove_file my_script
 

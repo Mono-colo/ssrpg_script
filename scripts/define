@@ -1,5 +1,5 @@
 ///////////////////    武器    ///////////////////
-//属性短剑(附魔攻速)*2
+//属性短剑(附魔攻速,第二附魔暴击)*2 
 var poison1 = "poison sword D -shiny -long *10 +11"
 var poison2 = "poison sword D -shiny -long *10 +7"
 
@@ -14,20 +14,6 @@ var fire2 = "fire sword D -shiny -long *10 +7"
 
 var ice1 = "ice sword D -shiny -long *10 +8"
 var ice2 = "ice sword D -shiny -long *10 +7"
-//var poison1 = "poison sword D shiny -long"
-//var poison2 = "poison sword D -shiny -long"
-
-//var vigor1 = "vigor sword D shiny -long"
-//var vigor2 = "vigor sword D -shiny -long"
-
-//var aether1 = "aether sword D shiny -long"
-//var aether2 = "aether sword D -shiny -long"
-
-//var fire1 = "fire sword D shiny -long"
-//var fire2 = "fire sword D -shiny -long"
-
-//var ice1 = "ice sword D shiny -long"
-//var ice2 = "ice sword D -shiny -long"
 
 //毒 dP 短剑 *10 +21
 var dP = "poison sword dP -shiny -long *10 +7"
@@ -35,8 +21,6 @@ var dP = "poison sword dP -shiny -long *10 +7"
 //活力 dL 短剑 *10 +21 *2
 var dL1 = "vigor sword dL -shiny -long *10 +8"
 var dL2 = "vigor sword dL -shiny -long *10 +7"
-//var dL1 = "vigor sword dL shiny -long"
-//var dL2 = "vigor sword dL -shiny -long"
 
 //冰 dI 短剑 *10 +21
 var dI = "ice sword dI -shiny -long *10 +7"
@@ -46,27 +30,43 @@ var cross1 = "crossbow *10 +12"
 var cross2 = "crossbow *10 +11" 
 
 // 属性重弩
-var poison_heavy_cross = "poison heavy_crossbow"
-var vigor_heavy_cross = "vigor heavy_crossbow"
-var aether_heavy_cross = "aether heavy_crossbow"
-var fire_heavy_cross = "fire heavy_crossbow"
-var ice_heavy_cross = "ice heavy_crossbow"
+var poison_heavy_cross = "poison heavy_crossbow D -shiny"
+var vigor_heavy_cross = "vigor heavy_crossbow D -shiny"
+var aether_heavy_cross = "aether heavy_crossbow D -shiny"
+var fire_heavy_cross = "fire heavy_crossbow D -shiny"
+var ice_heavy_cross = "ice heavy_crossbow D -shiny"
+
+// 破甲用属性战锤(附魔破甲,第二附魔为D)*2
+var poison_hammer1 = "poison hammer D -shiny"
+var poison_hammer2 = "poison hammer D -shiny"
+
+var vigor_hammer1 = "vigor hammer D -shiny"
+var vigor_hammer2 = "vigor hammer D -shiny"
+
+var aether_hammer1 = "aether hammer D -shiny"
+var aether_hammer2 = "aether hammer D -shiny"
+
+var fire_hammer1 = "fire hammer D -shiny"
+var fire_hammer2 = "fire hammer D -shiny"
+
+var ice_hammer1 = "ice hammer D -shiny"
+var ice_hammer2 = "ice hammer D -shiny"
 
 
-//技能用月牙
-var bardiche = "bardiche shiny"
-//技能用大锤
+// 技能用月刃斧（附魔暴击，第二附魔攻击）
+var bardiche = "bardiche *10"
+// 技能用大锤（附魔护甲增益降低，第二附魔持续时间）
 var heavy = "heavy hammer *10"
 
-//回甲最快的盾 *10 +21
-var speed_shield = "compound -shiny"
-//回甲最快的盾的上限
+// 回甲最快的盾 *10 +21
+var speed_shield = "compound -shiny *10"
+// 回甲最快的盾的上限
 var speed_shield_value = 14
-//上限最高的盾 *10 +21
-var value_shield = "compound shiny"
+// 上限最高的盾 *10 +21
+var value_shield = "compound shiny * 10"
 
 
-//属性A盾
+// 属性A盾
 var poison_shield_A = "poison shield A"
 var vigor_shield_A = "vigor shield A"
 var aether_shield_A = "aether shield A"
@@ -74,5 +74,5 @@ var fire_shield_A = "fire shield A"
 var ice_shield_A = "ice shield A"
 
 
-//叠药
+// 叠药
 var stackPotion = false

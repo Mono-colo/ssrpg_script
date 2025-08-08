@@ -378,16 +378,26 @@ var dL2 = "vigor sword dL -shiny -long *10 +7"
 var dI = "ice sword dI -shiny -long *10 +7"
 var cross1 = "crossbow *10 +12"
 var cross2 = "crossbow *10 +11" 
-var poison_heavy_cross = "poison heavy_crossbow"
-var vigor_heavy_cross = "vigor heavy_crossbow"
-var aether_heavy_cross = "aether heavy_crossbow"
-var fire_heavy_cross = "fire heavy_crossbow"
-var ice_heavy_cross = "ice heavy_crossbow"
-var bardiche = "bardiche shiny"
+var poison_heavy_cross = "poison heavy_crossbow D -shiny"
+var vigor_heavy_cross = "vigor heavy_crossbow D -shiny"
+var aether_heavy_cross = "aether heavy_crossbow D -shiny"
+var fire_heavy_cross = "fire heavy_crossbow D -shiny"
+var ice_heavy_cross = "ice heavy_crossbow D -shiny"
+var poison_hammer1 = "poison hammer D -shiny"
+var poison_hammer2 = "poison hammer D -shiny"
+var vigor_hammer1 = "vigor hammer D -shiny"
+var vigor_hammer2 = "vigor hammer D -shiny"
+var aether_hammer1 = "aether hammer D -shiny"
+var aether_hammer2 = "aether hammer D -shiny"
+var fire_hammer1 = "fire hammer D -shiny"
+var fire_hammer2 = "fire hammer D -shiny"
+var ice_hammer1 = "ice hammer D -shiny"
+var ice_hammer2 = "ice hammer D -shiny"
+var bardiche = "bardiche *10"
 var heavy = "heavy hammer *10"
-var speed_shield = "compound -shiny"
+var speed_shield = "compound -shiny *10"
 var speed_shield_value = 14
-var value_shield = "compound shiny"
+var value_shield = "compound shiny * 10"
 var poison_shield_A = "poison shield A"
 var vigor_shield_A = "vigor shield A"
 var aether_shield_A = "aether shield A"
@@ -563,16 +573,6 @@ func boss_1()
    selectEquip(dP, dI)
  :
   bashSkill()
-func boss_1_stackPotion()
- ?foe.distance <= 10
-  ?needPoison()
-   selectEquip(dP, "mask")
-  :?needIce()
-   selectEquip(dI, "mask")
-  :
-   selectEquip(dL1, "mask")
- :
-  bashSkill()
 func boss_2()
  ?foe.distance <= 10
   ?foe = "poison"
@@ -585,26 +585,6 @@ func boss_2()
    selectEquip(aether1, aether2)
   :?foe = "ice"
    selectEquip(fire1, fire2)
- :
-  bashSkill()
-func boss_2_stackPotion()
- ?foe.distance <= 10
-  ?foe = "poison"
-   selectEquip(ice1, "mask")
-  :?foe = "vigor"
-   selectEquip(poison1, "mask")
-  :?foe = "aether"
-   selectEquip(vigor1, "mask")
-  :?foe = "fire"
-   selectEquip(aether1, "mask")
-  :?foe = "ice"
-   selectEquip(fire1, "mask")
-  ?foe.time < 30 + iceEffect()
-   ?hp ! maxhp
-    selectEquip(dL1, "mask")
-   ?!foe.buffs.GetCount("buff_protection")
-    ?needIce()
-     selectEquip(dI, "mask")
  :
   bashSkill()
 func boss_3()

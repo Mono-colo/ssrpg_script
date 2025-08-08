@@ -339,7 +339,7 @@ func hammerSkill()
   return true
  return false
 
-//月牙
+//月刃斧
 func bardicheSkill()
  ?(item.CanActivate() &
  ^item.GetCooldown("bardiche") <= 0 &
