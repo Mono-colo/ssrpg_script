@@ -1,0 +1,71 @@
+>`62,0,召喚數:@summon.count@
+^#點擊位置:X@input.x@,Y@input.y@
+>`62,1,計時器:@totaltime@
+? totaltime < loc.bestTime
+  >`9,10,#4BCAD0,Now:
+^@time.FormatDigital(totaltime,true)@
+: ? totaltime > loc.averageTime
+  >`9,10,#FC294E,Now:
+^@time.FormatDigital(totaltime,true)@
+:
+  >`9,10,Now#:
+^@time.FormatDigital(totaltime,true)@
+>`9,11,Avg:
+^@time.FormatDigital(loc.averageTime)@
+>`9,12,Bst:
+^@time.FormatDigital(loc.bestTime)@
+//------------------------------
+>`25,1,#ffffff,weak:
+>`27,1,#666666,###∞##♥##*##φ##❄
+?foe = vigor
+  >`30,1,#19b500,∞
+:?foe = aether
+  >`33,1,#ee567a,♥
+:?foe = fire
+  >`36,1,#BDFD80,*
+:?foe = ice
+  >`39,1,#e44d28,φ
+:?foe = poison
+  >`42,1,#5AFDEB,❄
+>`25,2,Bd:@item.GetCooldown(＂bardiche＂)@
+>`25,3,Hm:@item.GetCooldown(＂hammer＂)@
+>`25,4,Bl:@item.GetCooldown(＂blade＂)@
+>`25,5,Dh:@item.GetCooldown(＂dash＂)@
+>`25,6,Qf:@item.GetCooldown(＂quarterstaff＂)@
+
+>`9,6,ascii
+hp:［@armor@］/@hp@/@maxhp@
+debuff:@debuffs.string@
+buff:@buffs.string@
+asciiend
+
+>`1,14,ascii
+距離:@foe.distance@
+數量:@foe.count@
+名子:@foe.name@
+傷害:@foe.damage@
+狀態:@foe.state@
+時間:@foe.time@
+HP:［@foe.armor@］@foe.hp@/@foe.maxHP@
+減益:@foe.debuffs.string@
+右手:@item.right@
+左手:@item.left@
+asciiend
+
+import Cosmetics/WavyScarf
+import UI/MindstoneButton
+
+
+var leave_button
+func leaveLocation()
+  loc.Leave()
+?loc.begin | loc.loop
+  leave_button = ui.AddButton()
+  leave_button.x = 1
+  leave_button.y = 11
+  leave_button.w = 8
+  leave_button.h = 3
+  leave_button.anchor = top_left
+  leave_button.dock = top_left
+  leave_button.text = ＂離開＂
+  leave_button.SetPressed(leaveLocation)
