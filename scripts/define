@@ -3,27 +3,27 @@
 var poison1 = "poison sword D -shiny -long *10 +11"
 var poison2 = "poison sword D -shiny -long *10 +8"
 
-var vigor1 = "vigor sword D -shiny -long *10 +10"
+var vigor1 = "vigor sword D -shiny -long *10 +11"
 var vigor2 = "vigor sword D -shiny -long *10 +9"
 
 var aether1 = "aether sword D -shiny -long *10 +10"
 var aether2 = "aether sword D -shiny -long *10 +9"
 
-var fire1 = "fire sword D -shiny -long *10 +9"
+var fire1 = "fire sword D -shiny -long *10 +10"
 var fire2 = "fire sword D -shiny -long *10 +8"
 
 var ice1 = "ice sword D -shiny -long *10 +9"
 var ice2 = "ice sword D -shiny -long *10 +8"
 
 //毒 dP 短剑 *10 +21
-var dP = "poison sword dP -shiny -long *10 +10"
+var dP = "poison sword dP -shiny -long *10 +11"
 
 //活力 dL 短剑 *10 +21 *2
 var dL1 = "vigor sword dL -shiny -long *10 +11"
 var dL2 = "vigor sword dL -shiny -long *10 +10"
 
 //冰 dI 短剑 *10 +21
-var dI = "ice sword dI -shiny -long *10 +10"
+var dI = "ice sword dI -shiny -long *10 +11"
 
 // 弩
 var cross1 = "crossbow *10 +12"
