@@ -312,9 +312,9 @@ func loc8_action()
     //重置循環計算
     resetAttackLoop()
 
-  ?stackPotion
-    selectEquip("quest", "mask")
-  :
-    restoreArmor("quest")
+    ?stackPotion
+      selectEquip("quest", "mask")
+    :
+      restoreArmor("quest")
 
-  return
+    return

@@ -651,8 +651,8 @@ func loc8_action()
     return
   ?!ai.enabled | ai.paused
     resetAttackLoop()
-  ?stackPotion
-    selectEquip("quest", "mask")
-  :
-    restoreArmor("quest")
-  return
+    ?stackPotion
+      selectEquip("quest", "mask")
+    :
+      restoreArmor("quest")
+    return
