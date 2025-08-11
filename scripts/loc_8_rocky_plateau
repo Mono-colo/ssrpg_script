@@ -3,44 +3,44 @@
 // 15* 3m28s    208s    0       215         168         17       4.88911      0.0235053/s
 //                      0.014   0.233       2.744       27.455
 ?loc = rocky_plateau
-
   // 取消后摇
-  acc()
+  aac()
 
   // 行走与战斗
   ?foe.distance > 25
-    run()
+    loc8_run()
   :?stackPotion
-   ?foe = phase1
-    boss_1_stackPotion()
-   :?foe = phase2
-    boss_2_stackPotion()
-   :?foe = phase3
-    boss_3_stackPotion()
-   :?foe = boss
-    boss_0_stackPotion()
-   :
-    attack_stackPotion() 
+    ?foe = phase1
+      loc8_boss_1_stackPotion()
+    :?foe = phase2
+      loc8_boss_2_stackPotion()
+    :?foe = phase3
+      loc8_boss_3_stackPotion()
+    :?foe = boss
+      loc8_boss_0_stackPotion()
+    :
+      loc8_attack_stackPotion() 
   :
-   ?foe = phase1
-    boss_1()
-   :?foe = phase2
-    boss_2()
-   :?foe = phase3
-    boss_3()
-   :?foe = boss
-    boss_0()
-   :
-    attack()
+    ?foe = phase1
+      loc8_boss_1()
+    :?foe = phase2
+      loc8_boss_2()
+    :?foe = phase3
+      loc8_boss_3()
+    :?foe = boss
+      loc8_boss_0()
+    :
+      loc8_attack()
 
   // 开局操作
-  main()
+  loc8_main()
 
+  // 更换装备
   changeEquip()
 
 
 ///////////////////    行走    ///////////////////
-func run()
+func loc8_run()
   // 木棒加速
   ?quarterstaffSkill()
     return
@@ -61,7 +61,7 @@ func run()
 
 ///////////////////    小怪    ///////////////////
 //高原沒有小怪, 直接跳過
-func attack()
+func loc8_attack()
   ?foe.distance <= 10
     ?hp ! maxhp
       selectEquip(dL1, dL2)
@@ -71,11 +71,11 @@ func attack()
     bashSkill()
   return
 
-func attack_stackPotion()
+func loc8_attack_stackPotion()
   return
 
 ///////////////////  小 boss  ///////////////////
-func boss_0()
+func loc8_boss_0()
   ?foe.distance <= 10
     ?hp ! maxhp
       selectEquip(dL1, dL2)
@@ -88,7 +88,7 @@ func boss_0()
   :
     bashSkill()
 
-// func boss_0_stackPotion()
+// func loc8_boss_0_stackPotion()
 //  ?foe.distance <= 10
 //   ?needPoison()
 //    selectEquip(dP, "mask")
@@ -98,7 +98,7 @@ func boss_0()
 //   bashSkill()
 
 ///////////////////   第1階段   ///////////////////
-func boss_1()
+func loc8_boss_1()
   ?foe.distance <= 10
     ?hp ! maxhp
       selectEquip(dL1, dL2)
@@ -111,7 +111,7 @@ func boss_1()
   :
     bashSkill()
 
-// func boss_1_stackPotion()
+// func loc8_boss_1_stackPotion()
 //  ?foe.distance <= 10
 //   ?needPoison()
 //    selectEquip(dP, "mask")
@@ -123,7 +123,7 @@ func boss_1()
 //   bashSkill()
 
 ///////////////////   第2階段   ///////////////////
-func boss_2()
+func loc8_boss_2()
   ?foe.distance <= 10
     ?foe = "poison"
       selectEquip(ice1, ice2)
@@ -138,7 +138,7 @@ func boss_2()
   :
     bashSkill()
 
-// func boss_2_stackPotion()
+// func loc8_boss_2_stackPotion()
 //  ?foe.distance <= 10
 //   ?foe = "poison"
 //    selectEquip(ice1, "mask")
@@ -162,7 +162,7 @@ func boss_2()
 //   bashSkill()
 
 ///////////////////   第3階段   ///////////////////
-func boss_3()
+func loc8_boss_3()
   //攻擊循環+1 (0~5)
   ?(foe.state=32 | foe.state=115) & !foe.time
     nextAttackLoop(6)
@@ -224,7 +224,7 @@ func boss_3()
   :
     bashSkill()
 
-// func boss_3_stackPotion()
+// func loc8_boss_3_stackPotion()
 //  //攻擊循環+1 (0~5)
 //  ?(foe.state=32 | foe.state=115) & !foe.time
 //   nextAttackLoop(6)
@@ -275,17 +275,17 @@ func boss_3()
 
 
 ///////////////////   开局阶段   ///////////////////
-func main()
+func loc8_main()
   ?totaltime <= 1
-    beginAction()
+    loc8_beginAction()
   :
-    action()
+    loc8_action()
 /* 開局行動
  當第一場開局時可以設定藥水和直接滿甲
  並且這時候大部分行動和技能都不能使用
  因此這部分獨立執行
 */
-func beginAction()
+func loc8_beginAction()
  //選藥水
   brewPotion()
 
@@ -296,7 +296,7 @@ func beginAction()
 
   bossStart = false
 //行动
-func action()
+func loc8_action()
   ?foe = phase1 & foe.hp ! foe.maxhp
     bossStart = true
 

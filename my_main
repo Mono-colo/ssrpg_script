@@ -6,8 +6,6 @@ import UI/MindstoneButton
 import UI/BetterInfo2
 
 
-
-
 ///////////////////    武器    ///////////////////
 //属性短剑(附魔攻速,第二附魔暴击)*2     +8, +13, +16, +20
 var poison1 = "poison sword D -shiny -long *10 +11"
@@ -82,3 +80,15 @@ var vigor_shield_A = "vigor shield A"
 var aether_shield_A = "aether shield A"
 var fire_shield_A = "fire shield A"
 var ice_shield_A = "ice shield A"
+
+
+
+import my_scripts/tool                 
+import my_scripts/loc_1_temple         
+import my_scripts/loc_2_icy_ridge      
+import my_scripts/loc_3_bronze_mine    
+import my_scripts/loc_4_undead_crypt   
+import my_scripts/loc_5_fungus_forest  
+import my_scripts/loc_6_caustic_caves  
+import my_scripts/loc_7_deadwood_valley
+import my_scripts/loc_8_rocky_plateau  

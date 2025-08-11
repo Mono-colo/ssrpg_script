@@ -3,29 +3,7 @@
 // 其他信息请见:StoneStoryRPG.com/stonescript.
 // ——贤者贝赛拉
 
-// 导入官方模块
-func import_appearances_modle()
-  // 导入飞行宠物模块
-  import Pets/Fly
 
-  // 辅助 UI
-  import UI/MindstoneButton
-  import UI/BetterInfo2
-
-
-// AAC(自动攻击控制)系统配置
-func AAC()
-  // 左手装备状态检测与切换
-  ?item.left.state = 3
-    equipL *0 wand
-    equipL @item.left@
-  // 右手装备状态检测与切换(根据时间奇偶性交替)
-  ?item.right.state = 3
-    ?time % 2
-      equipR throw
-    :
-      equipR *0 shield
-    equip @item.right@
 
 // 当无敌人且拾取物距离<=22时切换采集装备
 func equip_star_stone()
@@ -125,59 +103,8 @@ func activate_potion_flow_health(health)
   ?hp < health
     activate P
 
-//////////////////////////////////////////
-//////////////////////////////////////////
-//          条目:
-//地点:
-//  高原: rocky_plateau
-//  峡谷: deadwood_valley
-//  洞穴: caustic_caves
-//  蘑菇: fungus_forest
-//  鬼屋: undead_crypt
-//  矿井: bronze_mine
-//  雪山: icy_ridge
-//  寺庙: temple
-// 
-//元素属性:
-//  剧毒: poison
-//  活力: viger
-//  以太: aether 
-//  火焰: fire
-//  冰冻: ice
-//  石头: stone
-//
-//装备词条示例
-//  equip ice sword -shiny *10 +21
-//        寒冰 长剑  闪光   星级 附魔等级
-//
-//          装备库:
-//
-//
-//////////////////////////////////////////
-//////////////////////////////////////////
 
-// 载入外观 mod
-import_appearances_modle()
-
->`0,11, foe.dis    = @foe.distance@
->`0,12, staff      = @item.GetCooldown(＂quarterstaff＂)@
->`0,13, dash       = @item.GetCooldown(＂dash＂)@
->`0,14, bash       = @item.GetCooldown(＂bash＂)@
->`0,15, mind       = @item.GetCooldown(＂mind＂)@
->`0,16, State:Time = @foe.state@:@foe.time@
-
->`0,23,#white, My buffs: @buffs.string@
-
-
-
-
-
-
-
-
-
-
-
+///////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////
@@ -202,7 +129,7 @@ var bossStart = false
 var eL = ""
 var eR = ""
 
-func acc() // 取消后摇
+func aac() // 取消后摇
   ?item.left.state = 3
     equipL sword
   ?item.right.state = 3

@@ -2,7 +2,7 @@
 
 ?loc = temple
 
-  AAC()   
+  aac()   
   ?summon_talisman(aether)
     loadout ice_heavy_cross
     ?foe = boss

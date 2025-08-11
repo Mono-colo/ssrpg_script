@@ -2,7 +2,7 @@
 
 ?loc = deadwood_valley
 
-  AAC()
+  aac()
   ?summon_talisman(aether) // 以太
     ?foe.distance >= 11
       //equip_dash_and_bash()

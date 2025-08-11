@@ -2,7 +2,7 @@
 
 :?loc = undead_crypt    // 鬼屋
 
-  AAC()
+  aac()
   ?summon_talisman(aether) // 以太
     loadout 8
 

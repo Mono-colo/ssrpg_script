@@ -2,7 +2,7 @@
 
 ?loc = caustic_caves
 
-  AAC()
+  aac()
   ?summon_talisman(aether)
     ?foe.distance >= 11
       equip_dash_and_bash()

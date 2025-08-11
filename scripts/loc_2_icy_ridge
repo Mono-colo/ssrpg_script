@@ -2,7 +2,7 @@
 
 ?loc = icy_ridge
 
-  AAC()   
+  aac()   
   ?summon_talisman(aether)
     loadout 6
     ?foe = boss

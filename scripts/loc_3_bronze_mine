@@ -2,7 +2,7 @@
 
 ?loc = bronze_mine
 
-  AAC()
+  aac()
   ?summon_talisman(aether)
     ?foe.distance >= 11
     ^ &foe ! boss

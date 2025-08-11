@@ -2,7 +2,7 @@
 
 ?loc = fungus_forest
 
-  AAC()
+  aac()
   ?summon_talisman(aether)
     loadout 4
     ?foe = boss
