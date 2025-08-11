@@ -1,7 +1,7 @@
 import Pets/Fly
 import UI/MindstoneButton
 import UI/BetterInfo2
-var poison1 = "poison sword D -shiny -long *10 +11"
+var poison1 = "poison sword D -shiny -long *10 +13"
 var poison2 = "poison sword D -shiny -long *10 +8"
 var vigor1 = "vigor sword D -shiny -long *10 +11"
 var vigor2 = "vigor sword D -shiny -long *10 +9"
@@ -11,8 +11,8 @@ var fire1 = "fire sword D -shiny -long *10 +10"
 var fire2 = "fire sword D -shiny -long *10 +8"
 var ice1 = "ice sword D -shiny -long *10 +9"
 var ice2 = "ice sword D -shiny -long *10 +8"
-var dP = "poison sword dP -shiny -long *10 +11"
-var dL1 = "vigor sword dL -shiny -long *10 +11"
+var dP = "poison sword dP -shiny -long *10 +13"
+var dL1 = "vigor sword dL -shiny -long *10 +13"
 var dL2 = "vigor sword dL -shiny -long *10 +10"
 var dI = "ice sword dI -shiny -long *10 +11"
 var cross1 = "crossbow *10 +12"
@@ -42,31 +42,26 @@ var vigor_shield_A = "vigor shield A"
 var aether_shield_A = "aether shield A"
 var fire_shield_A = "fire shield A"
 var ice_shield_A = "ice shield A"
->`25,1, 长杖:@item.GetCooldown("quarterstaff")@
->`25,2, d冲:@item.GetCooldown("dash")@
->`25,3, b冲:@item.GetCooldown("bash")@
->`25,4, 后躲:@item.GetCooldown("mind")@
->`45,1, 堕神:@item.GetCooldown("blade")@
->`45,2, 面具:@item.GetCooldown("mask")@
->`45,3, 月牙:@item.GetCooldown("bardiche")@
->`45,4, 大锤:@item.GetCooldown("hammer")@
->`9,6,ascii
+>`2,11,ascii
+长杖:@item.GetCooldown("quarterstaff")@
+d冲:@item.GetCooldown("dash")@
+b冲:@item.GetCooldown("bash")@
+后躲:@item.GetCooldown("mind")@
+堕神:@item.GetCooldown("blade")@
+面具:@item.GetCooldown("mask")@
+月牙:@item.GetCooldown("bardiche")@
+大锤:@item.GetCooldown("hammer")@
+asciiend
+>`2,21,ascii
 HP:[@armor@]/@hp@/@maxhp@
-DEBUGG:@debuffs.string@
+DEBUFF:@debuffs.string@
 BUFF:@buffs.string@
-右手:@item.right@
 左手:@item.left@
+右手:@item.right@
 asciiend
->`1,14,ascii
-距离:@foe.distance@
-数量:@foe.count@
-名字:@foe.name@
-伤害:@foe.damage@
-状态:@foe.state@
-时间:@foe.time@
-HP:[@foe.armor@]@foe.hp@/@foe.maxHP@
-DEBUFF:@foe.debuffs.string@
-asciiend
+>`10,8,状态:@foe.state@
+>`17,8,时间:@foe.time@
+>`10,9,距离:@foe.distance@
 func equip_star_stone()
   ?pickup.distance <= 22
     equipL triskelion
@@ -544,10 +539,13 @@ func loc8_run()
     restoreArmor("trisk")
 func loc8_attack()
   ?foe.distance <= 10
-    ?hp ! maxhp
-      selectEquip(dL1, dL2)
-    :
-      selectEquip(dP, dI)
+    ?BladeSkill()
+      return
+    ?hammerSkill()
+      return
+    ?bardicheSkill()
+      return
+    selectEquipT(heavy)
   :
     bashSkill()
   return
@@ -558,7 +556,7 @@ func loc8_boss_0()
     ?hp ! maxhp
       selectEquip(dL1, dL2)
     :
-      selectEquip(dP, dI)
+      selectEquip(poison1, dP)
     ?needPoison()
       selectEquip(dP, dI)
     :?needIce()
@@ -570,7 +568,7 @@ func loc8_boss_1()
     ?hp ! maxhp
       selectEquip(dL1, dL2)
     :
-      selectEquip(dP, dI)
+      selectEquip(poison1, dP)
     ?needPoison()
       selectEquip(dP, dI)
     :?needIce()
@@ -594,7 +592,8 @@ func loc8_boss_2()
 func loc8_boss_3()
   ?(foe.state=32 | foe.state=115) & !foe.time
     nextAttackLoop(6)
-  ?foe.state=115 & foe.time > 74
+  ?(foe.state=115 & foe.time > 74 & loc.stars <= 15)
+  ^ | (foe.state=115 & foe.time > 71 & loc.stars > 15)
     ?mindSkill()
       return
     :

@@ -1,0 +1,1130 @@
+>`2,11,ascii
+长杖:@item.GetCooldown("quarterstaff")@
+d冲:@item.GetCooldown("dash")@
+b冲:@item.GetCooldown("bash")@
+后躲:@item.GetCooldown("mind")@
+堕神:@item.GetCooldown("blade")@
+面具:@item.GetCooldown("mask")@
+月牙:@item.GetCooldown("bardiche")@
+大锤:@item.GetCooldown("hammer")@
+asciiend
+
+>`2,21,ascii
+HP:[@armor@]/@hp@/@maxhp@
+DEBUFF:@debuffs.string@
+BUFF:@buffs.string@
+左手:@item.left@
+右手:@item.right@
+asciiend
+
+>`10,8,状态:@foe.state@
+>`17,8,时间:@foe.time@
+>`10,9,距离:@foe.distance@
+//>`10,9,DEBUFF:@foe.debuffs.string@
+// 当无敌人且拾取物距离<=22时切换采集装备
+func equip_star_stone()
+// ?foe.count = 0 & pickup.distance <= 22
+  ?pickup.distance <= 22
+    equipL triskelion
+    equipR star_stone
+
+// 装备采集工具
+func equip_collection_tool()
+  ?foe.count = 0 & harvest.distance <= 5 
+    ?harvest = Tree
+      equipL triskelion
+      equipR hatchet
+      activate R
+    :?harvest = Boulder
+      equip shovel
+
+// 装备冲刺盾并冲刺
+func equip_dash_and_bash()
+  ?harvest.distance > 5                         
+    ?foe.distance > 16 
+      equipL triskelion
+      equipR ouroboros
+      ?item.GetCooldown(＂quarterstaff＂) <= 0 &
+      ^item.CanActivate()
+        equip quarterstaff
+        activate R
+    :?foe.distance <= 16 & foe.distance >= 11
+      ?item.GetCooldown(＂dash＂) <= 0
+        equip dashing_shield  //dash
+      :?item.GetCooldown(＂bash＂) <= 0
+        equip bashing shield  //bash
+
+// 召唤精灵
+func summon_talisman(talisman)
+  ?talisman = fire
+    ?summon.GetId() ! ＂cinderwisp＂
+      equipL triskelion
+      equipR fire_talisman
+      ?item.CanActivate()
+      ^ & (item.GetCooldown(＂fire_talisman＂) <= 0 | item.GetCooldown(＂fire_talisman＂) >= 130)
+        activate R
+    :?summon.GetId() = ＂cinderwisp＂
+      return true
+  :?talisman = aether
+    ?summon.GetId() ! ＂voidweaver＂ 
+      equipL triskelion
+      equipR aether
+      ?item.CanActivate()
+      ^ & (item.GetCooldown(＂aether＂) <= 0 | item.GetCooldown(＂aether＂) >= 130)
+        activate R
+    :?summon.GetId() = ＂voidweaver＂
+      return true
+  return false
+  
+  
+
+// 堕神之刃
+// 当blade技能冷却结束且(敌人数量>5或敌人是boss)且物品可激活时,装备堕神之刃并激活R技能
+func active_skill_blade_of_god()
+  ?item.GetCooldown(＂blade＂) <= 0
+  ^ & ((foe.count > 5 | foe = boss) & foe.distance <= 22)
+  ^ & item.CanActivate()
+  ^ & foe ! Pallas
+    equip blade_of_god
+    activate R
+
+// 面具
+// 当mask技能冷却结束且面对Boss且距离<25且物品可激活时,装备邪教面具并激活R技能
+func active_skill_cult_mask()
+  ?item.GetCooldown(＂mask＂) <= 0
+  ^ & foe = boss
+  ^ & foe.distance < 25
+  ^ & item.CanActivate()
+    equip cult_mask
+    activate R
+
+// 骷髅手臂
+// 装备骷髅手臂进行作战
+func equip_skeleton_arm()
+  equip skeleton_arm
+  ?item.GetCooldown(＂skeleton_arm＂) <= 0 
+  ^ & foe.distance <= 7 //if close to enemy
+  ^ & foe ! ＂immune_to_physical＂
+  ^ & item.CanActivate(＂skeleton_arm＂)
+    activate R
+
+
+// 同时装备左右手弩
+func equip_both_crossbows()
+  equipL crossbow
+  equipR crossbow
+
+// 当生命值低于 health 时激活技能P(使用药水)
+func activate_potion_flow_health(health) 
+  ?hp < health
+    activate P
+
+
+///////////////////////////////////////////////////////
+///////////////////////////////////////////////////////
+///////////////////////////////////////////////////////
+///////////////////////////////////////////////////////
+///////////////////////////////////////////////////////
+
+
+///////////////////   初始变量   ///////////////////
+
+/* 疊藥開關
+注意:
+ 目前只有黃星或以上才可以疊藥
+
+ 必須確保已有+21面具的無限buff效果和只用左手也能打完一場的能力
+ 否則藥效可能不足夠持續到下一場
+*/
+var needStackPotion = loc.stars > 10 & false
+
+//紀錄是否開始boss戰
+var bossStart = false
+
+///////////////////    装备武器    ///////////////////
+var eL = ""
+var eR = ""
+
+func aac() // 取消后摇
+  ?item.left.state = 3
+    equipL sword
+  ?item.right.state = 3
+    equipR shield
+
+func selectEquipL(e) //左手，取代equipL
+ eL = e
+
+func selectEquipR(e) //右手，取代equipR
+ eR = e
+
+func selectEquip(L, R) //左右手
+ selectEquipL(L)
+ selectEquipR(R)
+ 
+func selectEquipT(e) //双手，取代equip
+ selectEquip(e, e)
+ 
+func changeEquip()
+ //如果左右手都是一樣就當作双手武器來裝備
+ ?eL = eR & eL
+  equip @eL@
+ : //否則左右手分開裝備
+  ?eL
+   equipL @eL@
+  ?eR
+   equipR @eR@
+
+
+//吸取掉落物
+func starPickup()
+ ?pickup.distance <= 5
+  selectEquip("trisk", "star")
+  return true
+ return false
+
+/* 回甲
+ 在空閒時增加盾量, 比如移動, boss動畫時
+ 先使用回甲快的盾, 當到達上限時再使用提高上限的盾
+
+ 放在左手的裝備主要有
+ 三曲腿("trick"): 移動加速
+ 任務石("quest"): 增加最大盾量(+2)
+*/
+func restoreArmor(L)
+ var speed_maxarmor = speed_shield_value
+ ?L = "quest"
+  speed_maxarmor = speed_maxarmor + 2
+ ?armor >= speed_maxarmor
+  selectEquip(L, value_shield)
+ :
+  selectEquip(L, speed_shield)
+
+/* 疊甲(元素)
+ 裝備A盾並在克制元素的敵人蘇醒時(23~25距離)會增加盾量並且可以突破最大值
+ 在大部分情況下可以有效減少受到的傷害
+*/
+func restoreArmor_element()
+ ?foe = "poison"
+  selectEquipR(ice_shield_A)
+ :?foe = "vigor"
+  selectEquipR(poison_shield_A)
+ :?foe = "aether"
+  selectEquipR(vigor_shield_A)
+ :?foe = "fire"
+  selectEquipR(aether_shield_A)
+ :?foe = "ice"
+  selectEquipR(fire_shield_A)
+
+///////////////////   攻擊技能   ///////////////////
+//墮神
+func BladeSkill()
+ ?item.GetCooldown("blade") <= 0 &
+ ^foe.distance <= 23 & //最遠攻擊距離, 防止連怪都沒看到就開技能
+ ^item.CanActivate()
+  selectEquipT("blade")
+  equip blade
+  activate R
+  return true
+ return false
+
+//跨屏墮神
+func BladeSkill_screenMove()
+ ?item.GetCooldown("blade") <= 0 &
+ ^foe.distance <= 23 & //最遠攻擊距離, 防止連怪都沒看到就開技能
+ ^item.CanActivate()
+  screen.Next() //移動畫面
+  //畫面長度為69, 增加55~56後即可攻擊到大部分敵人, 根據需要可自行調整
+  ?screen.x = screen.i * 69 + 55
+   BladeSkill()
+   screen.ResetOffset() //重置畫面
+   return true
+ return false
+
+//面具
+func maskSkill()
+ ?item.CanActivate() &
+ ^item.GetCooldown("mask") <= 0
+ ^ & foe.distance<24 //如果需要跨屏可以刪掉距離限制
+  selectEquipT("mask")
+  equipR mask
+  activate R
+  return true
+ return false
+
+//骷髏手
+func armSkill()
+ ?buffs.string = "pick_pocket" & //必要buff
+ ^foe.distance > 3 & foe.distance < 9 & //可使用範圍
+ ^item.GetCooldown("skeleton_arm") <= 0 &
+ ^item.CanActivate()
+  selectEquipT("skeleton_arm")
+  equip skeleton_arm
+  activate R
+  return true
+ return false
+
+//大鎚
+func hammerSkill()
+ ?(item.CanActivate() &
+ ^item.GetCooldown("heavy_hammer") <= 0 &
+ ^foe.distance <= 23) | //有效攻擊距離, 防止連怪都沒看到就開技能
+ ^(item.right = "heavy" & //攻擊中, 可能會把普通攻擊誤判為技能使用
+ ^item.right.state = 2)
+  selectEquipT(heavy)
+  equip @heavy@
+  activate R
+  return true
+ return false
+
+//月刃斧
+func bardicheSkill()
+ ?(item.CanActivate() &
+ ^item.GetCooldown("bardiche") <= 0 &
+ ^foe.distance <= 10) | //有效攻擊距離, 防止連怪都沒看到就開技能
+ ^(item.right = "bardiche" & //攻擊中, 可能會把普通攻擊誤判為技能使用
+ ^item.right.state = 2)
+  selectEquipT(bardiche)
+  equip @bardiche@
+  activate R
+  return true
+ return false
+
+///////////////////   移動技能   ///////////////////
+//木棒衝刺
+func quarterstaffSkill()
+ ?item.GetCooldown("quarterstaff") <= 0 &
+ ^item.CanActivate()
+  selectEquipT("quarterstaff")
+  equip quarterstaff
+  activate R
+  return true
+ return false
+
+/* 盾衝用法
+ 盾衝主要有2種用法
+
+ //?dashSkill()
+ // return
+ //...
+
+ 上方的用法會先使用盾衝可以盡量保持在近距離的範圍內
+ 由於盾衝中使用的距離是10~16, 因此邏輯上兩種用法的效果是一樣的
+ 但某些boss的近距離攻擊傷害更高, 或者需要特定的移動方式而不適合使用移動技能時
+ 可以使用下方的用法, 先進行檢測, 當有移動的需求才開始使用盾衝
+
+ //?foe.distance <= 10
+ // ...
+ //:?...
+ // ...
+ //:
+ // dashSkill()
+*/
+
+//盾衝(先用普通盾) 普通盾冷却时间短, 对可以多次衝刺/需要赶路的目标(如小怪)时可以先用普通盾
+func dashSkill()
+ //距離在16~10之間時, 嘗試使用盾衝
+ ?foe.distance > 10 & foe.distance <= 16
+  ?item.GetCooldown("dash") <= 0
+   selectEquip("trisk","dash")
+   return true
+  ?item.GetCooldown("bash") <= 0
+   selectEquip("trisk","bash")
+   return true
+ //無法盾衝時再嘗試使用木棒衝刺
+ ?quarterstaffSkill()
+  return true
+ //如果技能都用不了就裝上劍盾向前移動
+ restoreArmor("sword")
+ return false
+
+//盾衝(先用遺物盾) 遺物盾能增加盾量, 對不需要多次衝刺的目標(如boss)時可以先用遺物盾
+func bashSkill()
+ //距離在16~10之間時, 嘗試使用盾衝
+ ?foe.distance > 10 & foe.distance <= 16
+  ?item.GetCooldown("bash") <= 0
+   selectEquip("trisk","bash")
+   return true
+  ?item.GetCooldown("dash") <= 0
+   selectEquip("trisk","dash")
+   return true
+ //無法盾衝時再嘗試使用木棒衝刺
+ ?quarterstaffSkill()
+  return true
+ //如果技能都用不了就裝上劍盾向前移動
+ restoreArmor("sword")
+ return false
+
+//躲避
+func mindSkill()
+ ?item.GetCooldown("mind") <= 0
+  selectEquip("quest","mind")
+  return true
+ return false
+
+
+
+///////////////////   護符技能   ///////////////////
+//火護符
+func fire_talismanSkill()
+ ?summon.GetId() ! "cinderwisp" &
+ ^(item.CanActivate() &
+ ^item.GetCooldown("fire_talisman") <= 0 |
+ ^item.right="fire_talisman" &
+ ^item.right.state=2)
+  selectEquip("trisk","fire_talisman")
+  equipL trisk
+  equipR fire_talisman
+  activate R
+  return true
+ return false
+//火精靈技能
+func cinderwispSkill_count(n)
+ ?summon.GetId() = "cinderwisp" &
+ ^item.GetCooldown("cinderwisp") <= 0 &
+ ^summon.GetVar("ignition") >= n
+  activate cinderwisp
+  return true
+ return false
+/* 火精靈技能(固定層數)
+不同的附魔選擇,適合使用的時間也會不同
+根據需要自行調整
+*/
+func cinderwispSkill()
+ return cinderwispSkill_count(6)
+
+//乙太護符
+func aether_talismanSkill()
+ ?(summon.GetId() ! "voidweaver" &
+ ^item.CanActivate() &
+ ^item.GetCooldown("aether_talisman") <= 0) |
+ ^(item.right="aether_talisman" &
+ ^item.right.state=2)
+  selectEquip("trisk","aether_talisman")
+  equipL trisk
+  equipR aether_talisman
+  activate R
+  return true
+ return false
+//乙太精靈技能
+func voidweaverSkill()
+ ?summon.GetId() = "voidweaver" &
+ ^item.GetCooldown("voidweaver") <= 0
+  activate voidweaver
+  return true
+ return false
+
+///////////////////   月石加速   ///////////////////
+/*
+原理:
+ 裝備月石時雙手的裝備攻速+5, 使用特定排列可以讓某些攻速的組合更快
+
+ 根據前搖速度目前主要有三種組合
+  4 + 4 (+17~20短劍, +21短杖)
+  4 + 3
+  3 + 3 (+21短劍)
+
+注意:
+ 攻速藥的攻速加成比月石還高, 喝藥後再使用月石加速會有反效果
+*/
+var moonTimer = -1
+
+/* 4 + 4
+0 - M R
+1 - M R
+2 - M L
+3 - M L
+4 - L R
+*/
+func moondialing_4_4(L, R)
+ moonTimer = totaltime % 5
+ ?moonTimer = 0 | moonTimer = 1
+  selectEquip("moon", R)
+ :?moonTimer = 2 | moonTimer = 3
+  selectEquip("moon", L)
+ :?moonTimer = 4
+  selectEquip(L, R)
+
+/* 4(L) + 3(R)
+0 - M R
+1 - R L
+2 - M L
+3 - M R
+4 - R L
+*/
+func moondialing_4_3(L, R)
+ moonTimer = totaltime % 5
+ ?moonTimer = 1 | moonTimer = 4
+  selectEquipL(R)
+ :
+  selectEquipL("moon")
+ ?moonTimer = 0 | moonTimer = 3
+  selectEquipR(R)
+ :
+  selectEquipR(L)
+
+/* 3 + 3
+0 - M R
+1 - M L
+2 - L R
+*/
+func moondialing_3_3(L, R)
+ moonTimer = totaltime % 3
+ ?moonTimer = 0
+  selectEquip("moon", R)
+ :?moonTimer = 1
+  selectEquip("moon", L)
+ :?moonTimer = 2
+  selectEquip(L, R)
+
+
+///////////////////    藥水    ///////////////////
+/*
+檢查是否需要疊藥
+
+需要先開啟needStackPotion確定
+當藥效比平均時間短時開始疊藥
+
+如果沒有打過的時間會是-1, 所以需要額外判斷平均時間是否小於0
+*/
+var stackPotion = false
+func checkStackPotion()
+ stackPotion = needStackPotion &
+ ^(loc.averageTime < 0 |
+ ^getPotionTime() < loc.averageTime)
+ return stackPotion
+
+/*
+疊藥用, 如果在用星石吸箱子或者開關打開時喝藥
+通常情況下只有一開始和拿箱子時才會有藥,
+如果是暴擊藥這種可以另外提供效果而需要在特定時間使用的則需要額外判斷
+*/
+func useStackPotion()
+ ?item.potion ! "empty" &
+ ^((item.right = "star" & bossStart)
+ ^| stackPotion)
+  activate potion
+  return true
+
+func getPotionTime()
+ ?buffs.GetTime("vampiric") //吸血
+  return buffs.GetTime("vampiric")
+ ?buffs.GetTime("berserk") //攻速
+  return buffs.GetTime("berserk")
+ ?buffs.GetTime("strength") //破甲
+  return buffs.GetTime("strength")
+ ?buffs.GetTime("invisibility") //閃避
+  return buffs.GetTime("invisibility")
+ ?buffs.GetTime("lucky_crit") //爆擊
+  return buffs.GetTime("lucky_crit")
+ ?buffs.GetTime("experience") //經驗
+  return buffs.GetTime("experience")
+ return 0
+
+//選藥, 放在一起方便改
+func brewPotion()
+ brew stone + bronze //lucky(爆擊)
+ //brew wood + bronze //berserk(攻速)
+ //brew tar + bronze //vampiric(吸血)
+ //brew stone //strength(擊暈+破甲)
+ //brew stone + wood //invisibility(閃避)
+ //brew tar + wood //cleansing(清debuff)
+ //brew tar + stone //strength(回甲)
+ //brew tar //healing(回血)
+ //brew bronze //lightning(aoe傷害)
+ //brew wood //experience(經驗)
+ return
+///////////////////   資料計算   ///////////////////
+/*
+ 單個+15短劍攻速為7f一次, 長杖為5f一次
+ 如果附魔等級不足夠可以把時間更改為14f(未附魔攻速)
+*/
+//火debuff
+func needFire() //如果火debuff不存在或者時間小於10f則返回true
+ return //!foe.debuffs.GetCount("debuff_dot") |
+ ^foe.debuffs.GetTime("debuff_dot") <= 10
+
+//毒debuff
+func needPoison() //如果毒debuff不存在或者時間小於10f則返回true
+ return //!foe.debuffs.GetCount("debuff_damage") |
+ ^foe.debuffs.GetTime("debuff_damage") <= 10
+//精淮上毒
+func needPoison_timing(s, t)
+ return needPoison() & timing(s, t - 12)
+
+//冰debuff
+func needIceCount(n) //如果冰debuff小於n或者時間小於10f則返回true
+ return
+ ^foe.debuffs.GetCount("debuff_chill") < n |
+ ^foe.debuffs.GetTime("debuff_chill") <= 10
+func needIce() //目前冰debuff最高為6層
+ return needIceCount(6)
+/*
+ 每層冰debuff增加20/3f 6層為40f
+ 但層數不穩定會使躲避或上毒時間錯誤而導致死亡
+ 因此在冰debuff消失時需要盡快補上
+
+ 或者不要上冰debuff
+*/
+func iceEffect()
+ return foe.debuffs.GetCount("debuff_chill")
+ ^ * 20 / 3
+
+/* boss攻擊循環
+ 一些boss會以某種循環方式使用相同的for.state但不同的方式進行攻擊
+ 這種情況下可以使用attackLoop紀錄攻擊次數以進行應對
+*/
+var attackLoop = -1
+//重置循環計算
+func resetAttackLoop()
+ attackLoop = -1
+ return attackLoop
+//下一次攻擊計算
+//loopCount為每次循環的攻擊次數
+func nextAttackLoop(loopCount)
+ attackLoop = (attackLoop + 1) % loopCount
+ return attackLoop
+
+//應對時機
+func timing(s, t)
+ return foe.state=s & foe.time>=t+iceEffect()// 寺庙
+
+?loc = temple
+
+  aac()   
+  ?summon_talisman(aether)
+    loadout ice_heavy_cross
+    ?foe = boss
+      loadout 4
+
+    
+  // 当生命值低于 30 时激活技能P（使用药水）
+  activate_potion_flow_health(30)
+
+  // 堕神之刃
+  // 当blade技能冷却结束且(敌人数量>5或敌人是boss)且物品可激活时,装备堕神之刃并激活R技能
+  active_skill_blade_of_god()
+
+  // 面具
+  // 当mask技能冷却结束且面对Boss且距离<25且物品可激活时,装备邪教面具并激活R技能
+  ?loc ! temple
+    active_skill_cult_mask()
+
+  // 当无敌人且拾取物距离<=22时切换 星石
+  equip_star_stone()
+
+  // 装备采集工具
+  equip_collection_tool()       // 意念之石启动之后,可以持续执行它所收到的指令.
+// 雪山
+
+?loc = icy_ridge
+
+  aac()   
+  ?summon_talisman(aether)
+    loadout 6
+    ?foe = boss
+      loadout 6
+    
+
+  // 当生命值低于 30 时激活技能P（使用药水）
+  activate_potion_flow_health(30)
+
+  // 堕神之刃
+  // 当blade技能冷却结束且(敌人数量>5或敌人是boss)且物品可激活时,装备堕神之刃并激活R技能
+  active_skill_blade_of_god()
+
+  // 面具
+  // 当mask技能冷却结束且面对Boss且距离<25且物品可激活时,装备邪教面具并激活R技能
+  ?loc ! temple
+    active_skill_cult_mask()
+
+  // 当无敌人且拾取物距离<=22时切换 星石
+  equip_star_stone()
+
+  // 装备采集工具
+  equip_collection_tool()       // 意念之石启动之后,可以持续执行它所收到的指令.// 矿井
+
+?loc = bronze_mine
+
+  aac()
+  ?summon_talisman(aether)
+    ?foe.distance >= 11
+    ^ &foe ! boss
+      equip_dash_and_bash()
+    :
+      > dis < 11
+      //equip_skeleton_arm()
+      loadout 1
+      ?foe = boss
+        loadout 3
+  ?foe = boss
+    activate_potion_flow_health(31)
+
+
+  // 当生命值低于 30 时激活技能P（使用药水）
+  activate_potion_flow_health(30)
+
+
+  // 堕神之刃
+  // 当blade技能冷却结束且(敌人数量>5或敌人是boss)且物品可激活时,装备堕神之刃并激活R技能
+  active_skill_blade_of_god()
+
+
+  // 面具
+  // 当mask技能冷却结束且面对Boss且距离<25且物品可激活时,装备邪教面具并激活R技能
+  ?loc ! temple
+    active_skill_cult_mask()
+
+
+  // 当无敌人且拾取物距离<=22时切换 星石
+  equip_star_stone()
+
+
+  // 装备采集工具
+  equip_collection_tool()       // 意念之石启动之后,可以持续执行它所收到的指令.
+// 鬼屋
+
+:?loc = undead_crypt    // 鬼屋
+
+  aac()
+  ?summon_talisman(aether) // 以太
+    loadout 8
+
+
+  // 当生命值低于 30 时激活技能P（使用药水）
+  activate_potion_flow_health(30)
+
+
+  // 堕神之刃
+  // 当blade技能冷却结束且(敌人数量>5或敌人是boss)且物品可激活时,装备堕神之刃并激活R技能
+  active_skill_blade_of_god()
+
+  // 面具
+  // 当mask技能冷却结束且面对Boss且距离<25且物品可激活时,装备邪教面具并激活R技能
+  ?loc ! temple
+    active_skill_cult_mask()
+
+  // 当无敌人且拾取物距离<=22时切换 星石
+  equip_star_stone()
+
+  // 装备采集工具
+  equip_collection_tool()       // 意念之石启动之后,可以持续执行它所收到的指令.// 蘑菇
+
+?loc = fungus_forest
+
+  aac()
+  ?summon_talisman(aether)
+    loadout 4
+    ?foe = boss
+      loadout 9
+
+
+  // 当生命值低于 30 时激活技能P（使用药水）
+  activate_potion_flow_health(30)
+
+
+  // 堕神之刃
+  // 当blade技能冷却结束且(敌人数量>5或敌人是boss)且物品可激活时,装备堕神之刃并激活R技能
+  active_skill_blade_of_god()
+
+  // 面具
+  // 当mask技能冷却结束且面对Boss且距离<25且物品可激活时,装备邪教面具并激活R技能
+  ?loc ! temple
+    active_skill_cult_mask()
+
+  // 当无敌人且拾取物距离<=22时切换 星石
+  equip_star_stone()
+
+  // 装备采集工具
+  equip_collection_tool()       // 意念之石启动之后,可以持续执行它所收到的指令.
+// 洞穴
+
+?loc = caustic_caves
+
+  aac()
+  ?summon_talisman(aether)
+    ?foe.distance >= 11
+      equip_dash_and_bash()
+    :
+      > dis < 11
+      //equip_skeleton_arm()
+      loadout 3
+      ?foe = boss
+        loadout 9
+
+
+  // 当生命值低于 30 时激活技能P（使用药水）
+  activate_potion_flow_health(30)
+
+
+  // 堕神之刃
+  // 当blade技能冷却结束且(敌人数量>5或敌人是boss)且物品可激活时,装备堕神之刃并激活R技能
+  active_skill_blade_of_god()
+
+  // 面具
+  // 当mask技能冷却结束且面对Boss且距离<25且物品可激活时,装备邪教面具并激活R技能
+  ?loc ! temple
+    active_skill_cult_mask()
+
+  // 当无敌人且拾取物距离<=22时切换 星石
+  equip_star_stone()
+
+  // 装备采集工具
+  equip_collection_tool()// 意念之石启动之后,可以持续执行它所收到的指令.
+// 峡谷
+
+?loc = deadwood_valley
+
+  aac()
+  ?summon_talisman(aether) // 以太
+    ?foe.distance >= 11
+      //equip_dash_and_bash()
+      loadout 9
+    :
+      > dis < 11
+      //equip_skeleton_arm()
+      loadout 9
+      ?foe = boss
+        loadout 7
+
+
+  // 当生命值低于 30 时激活技能P（使用药水）
+  activate_potion_flow_health(30)
+
+  // 堕神之刃
+  // 当blade技能冷却结束且(敌人数量>5或敌人是boss)且物品可激活时,装备堕神之刃并激活R技能
+  active_skill_blade_of_god()
+
+  // 面具
+  // 当mask技能冷却结束且面对Boss且距离<25且物品可激活时,装备邪教面具并激活R技能
+  ?loc ! temple
+    active_skill_cult_mask()
+
+  // 当无敌人且拾取物距离<=22时切换 星石
+  equip_star_stone()
+
+  // 装备采集工具
+  equip_collection_tool()       // 意念之石启动之后,可以持续执行它所收到的指令.
+// 高原
+// 13* 2m51s    171s    10      241         134         15       2.089535     0.0122195/s
+// 15* 3m28s    208s    0       215         168         17       4.88911      0.0235053/s
+//                      0.014   0.233       2.744       27.455
+?loc = rocky_plateau
+  // 取消后摇
+  aac()
+
+  // 行走与战斗
+  ?foe.distance > 25
+    loc8_run()
+  :?stackPotion
+    ?foe = phase1
+      loc8_boss_1_stackPotion()
+    :?foe = phase2
+      loc8_boss_2_stackPotion()
+    :?foe = phase3
+      loc8_boss_3_stackPotion()
+    :?foe = boss
+      loc8_boss_0_stackPotion()
+    :
+      loc8_attack_stackPotion() 
+  :
+    ?foe = phase1
+      loc8_boss_1()
+    :?foe = phase2
+      loc8_boss_2()
+    :?foe = phase3
+      loc8_boss_3()
+    :?foe = boss
+      loc8_boss_0()
+    :
+      loc8_attack()
+
+  // 开局操作
+  loc8_main()
+
+  // 更换装备
+  changeEquip()
+
+
+///////////////////    行走    ///////////////////
+func loc8_run()
+  // 木棒加速
+  ?quarterstaffSkill()
+    return
+
+  // 召唤火精靈
+  ?fire_talismanSkill()
+    return
+
+  // 開始疊藥
+  // useStackPotion()
+
+  // 如果在疊藥就拿面具, 否則拿盾回甲
+  ?stackPotion
+    selectEquip("trisk", "mask")
+  :
+    restoreArmor("trisk")
+
+
+///////////////////    小怪    ///////////////////
+//高原沒有小怪, 直接跳過
+func loc8_attack()
+  ?foe.distance <= 10
+    ?BladeSkill()
+      return
+    ?hammerSkill()
+      return
+    ?bardicheSkill()
+      return
+    selectEquipT(heavy)
+  :
+    bashSkill()
+  return
+
+func loc8_attack_stackPotion()
+  return
+
+///////////////////  小 boss  ///////////////////
+func loc8_boss_0()
+  ?foe.distance <= 10
+    ?hp ! maxhp
+      selectEquip(dL1, dL2)
+    :
+      selectEquip(poison1, dP)
+    ?needPoison()
+      selectEquip(dP, dI)
+    :?needIce()
+      selectEquip(dP, dI)
+  :
+    bashSkill()
+
+// func loc8_boss_0_stackPotion()
+//  ?foe.distance <= 10
+//   ?needPoison()
+//    selectEquip(dP, "mask")
+//   :
+//    selectEquip(dI, "mask")
+//  :
+//   bashSkill()
+
+///////////////////   第1階段   ///////////////////
+func loc8_boss_1()
+  ?foe.distance <= 10
+    ?hp ! maxhp
+      selectEquip(dL1, dL2)
+    :
+      selectEquip(poison1, dP)
+    ?needPoison()
+      selectEquip(dP, dI)
+    :?needIce()
+      selectEquip(dP, dI)
+  :
+    bashSkill()
+
+// func loc8_boss_1_stackPotion()
+//  ?foe.distance <= 10
+//   ?needPoison()
+//    selectEquip(dP, "mask")
+//   :?needIce()
+//    selectEquip(dI, "mask")
+//   ://?hp ! maxhp
+//    selectEquip(dL1, "mask")
+//  :
+//   bashSkill()
+
+///////////////////   第2階段   ///////////////////
+func loc8_boss_2()
+  ?foe.distance <= 10
+    ?foe = "poison"
+      selectEquip(ice1, ice2)
+    :?foe = "vigor"
+      selectEquip(poison1, poison2)
+    :?foe = "aether"
+      selectEquip(vigor1, vigor2)
+    :?foe = "fire"
+      selectEquip(aether1, aether2)
+    :?foe = "ice"
+      selectEquip(fire1, fire2)
+  :
+    bashSkill()
+
+// func loc8_boss_2_stackPotion()
+//  ?foe.distance <= 10
+//   ?foe = "poison"
+//    selectEquip(ice1, "mask")
+//   :?foe = "vigor"
+//    selectEquip(poison1, "mask")
+//   :?foe = "aether"
+//    selectEquip(vigor1, "mask")
+//   :?foe = "fire"
+//    selectEquip(aether1, "mask")
+//   :?foe = "ice"
+//    selectEquip(fire1, "mask")
+
+//   //boss攻擊前根據需要上冰或者回血
+//   ?foe.time < 30 + iceEffect()
+//    ?hp ! maxhp
+//     selectEquip(dL1, "mask")
+//    ?!foe.buffs.GetCount("buff_protection")
+//     ?needIce()
+//      selectEquip(dI, "mask")
+//  :
+//   bashSkill()
+
+///////////////////   第3階段   ///////////////////
+func loc8_boss_3()
+  //攻擊循環+1 (0~5)
+  ?(foe.state=32 | foe.state=115) & !foe.time
+    nextAttackLoop(6)
+
+  //放大就后退
+  ?(foe.state=115 & foe.time > 74 & loc.stars <= 15)
+  ^ | (foe.state=115 & foe.time > 71 & loc.stars > 15)
+    ?mindSkill()
+      return
+    :
+      selectEquip(cross1, cross2)
+      return
+
+  // 距离够了，近战
+  ?foe.distance <= 10
+    //喝暴擊藥打傷害
+    ?item.potion ! "empty"
+      activate potion
+
+    //大鎚技能削減盾量
+    ?attackLoop = 2 & timing(32, 12)
+      ?hammerSkill()
+        return
+
+    //躲晕
+    ?attackLoop = 2 & timing(32, 27)
+    ^ & foe.distance < 8
+      mindSkill()
+      return
+
+    //boss普攻前上毒減傷
+    ?attackLoop ! 2 & timing(32, 39)
+      ?maskSkill()
+        return
+      ?needPoison()
+        selectEquip(dP, dI)
+        return
+
+    //上冰
+    ?needIce()
+      selectEquip(dP, dI)
+      return
+
+    //哪一對小劍傷害高就用那個
+    // selectEquip(poison1, vigor1)
+    ?!foe.buffs.GetCount("adaptive_defense_poison")
+      selectEquip(poison1, poison2)
+    :?!foe.buffs.GetCount("adaptive_defense_vigor")
+      selectEquip(vigor1, vigor2)
+    :?!foe.buffs.GetCount("adaptive_defense_aether")
+      selectEquip(aether1, aether2)
+    :?!foe.buffs.GetCount("adaptive_defense_fire")
+      selectEquip(fire1, fire2)
+    :?!foe.buffs.GetCount("adaptive_defense_ice")
+      selectEquip(ice1, ic2)
+
+    //吸血
+    ?hp ! maxhp
+      selectEquip(dL1, dL2)
+  :
+    bashSkill()
+
+// func loc8_boss_3_stackPotion()
+//  //攻擊循環+1 (0~5)
+//  ?(foe.state=32 | foe.state=115) & !foe.time
+//   nextAttackLoop(6)
+
+//  //擊晕
+//  ?attackLoop = 2 &
+//  ^timing(32, 27) &
+//  ^foe.distance < 8
+//   mindSkill()
+//   return
+
+//  ?foe.distance <= 10
+//   //大鎚技能削減盾量
+//   ?attackLoop = 2 & timing(32, 12)
+//    ?hammerSkill()
+//     return
+
+//   //boss普攻前上毒減傷
+//   ?attackLoop ! 2 & timing(32, 39)
+//    ?maskSkill()
+//     return
+//    ?needPoison()
+//     selectEquip(dP, "mask")
+//     return
+
+//   //上冰
+//   ?needIce()
+//    selectEquip(dI, "mask")
+//    return
+
+//   ?!foe.buffs.GetCount(
+//   ^"adaptive_defense_poison")
+//    selectEquip(poison1, "mask")
+//   :?!foe.buffs.GetCount(
+//   ^"adaptive_defense_vigor")
+//    selectEquip(vigor1, "mask")
+//   :?!foe.buffs.GetCount(
+//   ^"adaptive_defense_aether")
+//    selectEquip(aether1, "mask")
+//   :?!foe.buffs.GetCount(
+//   ^"adaptive_defense_fire")
+//    selectEquip(fire1, "mask")
+//   :?!foe.buffs.GetCount(
+//   ^"adaptive_defense_ice")
+//    selectEquip(ice1, "mask")
+//  :
+//   bashSkill()
+
+
+///////////////////   开局阶段   ///////////////////
+func loc8_main()
+  ?totaltime <= 1
+    loc8_beginAction()
+  :
+    loc8_action()
+/* 開局行動
+ 當第一場開局時可以設定藥水和直接滿甲
+ 並且這時候大部分行動和技能都不能使用
+ 因此這部分獨立執行
+*/
+func loc8_beginAction()
+ //選藥水
+  brewPotion()
+
+ //第一埸開局會直接滿甲, 記得帶上限最高的盾
+  selectEquip("quest",value_shield)
+
+  checkStackPotion()
+
+  bossStart = false
+//行动
+func loc8_action()
+  ?foe = phase1 & foe.hp ! foe.maxhp
+    bossStart = true
+
+  //火精靈技能(能用就用, 不能用也不要緊)
+  cinderwispSkill()
+
+  //吸取掉落物
+  ?starPickup()
+    return
+
+  //動畫中回甲
+  ?!ai.enabled | ai.paused
+    //重置循環計算
+    resetAttackLoop()
+
+    ?stackPotion
+      selectEquip("quest", "mask")
+    :
+      restoreArmor("quest")
+
+    return

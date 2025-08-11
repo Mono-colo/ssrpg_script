@@ -10,7 +10,7 @@ import UI/BetterInfo2
 
 ///////////////////    武器    ///////////////////
 //属性短剑(附魔攻速,第二附魔暴击)*2     +8, +13, +16, +20
-var poison1 = "poison sword D -shiny -long *10 +11"
+var poison1 = "poison sword D -shiny -long *10 +13"
 var poison2 = "poison sword D -shiny -long *10 +8"
 
 var vigor1 = "vigor sword D -shiny -long *10 +11"
@@ -26,10 +26,10 @@ var ice1 = "ice sword D -shiny -long *10 +9"
 var ice2 = "ice sword D -shiny -long *10 +8"
 
 //毒 dP 短剑 *10 +21
-var dP = "poison sword dP -shiny -long *10 +11"
+var dP = "poison sword dP -shiny -long *10 +13"
 
 //活力 dL 短剑 *10 +21 *2
-var dL1 = "vigor sword dL -shiny -long *10 +11"
+var dL1 = "vigor sword dL -shiny -long *10 +13"
 var dL2 = "vigor sword dL -shiny -long *10 +10"
 
 //冰 dI 短剑 *10 +21
@@ -83,13 +83,4 @@ var aether_shield_A = "aether shield A"
 var fire_shield_A = "fire shield A"
 var ice_shield_A = "ice shield A"
 
-import my_scripts/ui                   
-import my_scripts/tool                 
-import my_scripts/loc_1_temple         
-import my_scripts/loc_2_icy_ridge      
-import my_scripts/loc_3_bronze_mine    
-import my_scripts/loc_4_undead_crypt   
-import my_scripts/loc_5_fungus_forest  
-import my_scripts/loc_6_caustic_caves  
-import my_scripts/loc_7_deadwood_valley
-import my_scripts/loc_8_rocky_plateau  
+import Mys/MyScript

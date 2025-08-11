@@ -29,13 +29,15 @@ remove_file() {
     log INFO "Delete file: ${filename}"
 }
 
-copy_file() {
-    local src="$1"
-    local dest_dir="$2"
+copy_and_rename_file() {
+    local src_dir="$1"
+    local src_file="$2"
+    local src=${src_dir}/${src_file}
+    local dest_dir="/c/Users/MonoColor/AppData/LocalLow/Martian Rex, Inc_/Stone Story/76561198192585611/Stonescript/Mys"
 
     # 检查参数
     if [ -z "$src" ] || [ -z "$dest_dir" ]; then
-        echo "Usage: copy_file <源文件> <目标目录>"
+        echo "Usage: copy_and_rename_file <源文件目录> <源文件>"
         return 1
     fi
 
@@ -58,8 +60,8 @@ copy_file() {
     fi
 
     # 复制文件
-    cp "$src" "$dest_dir"
-    log INFO "Copied: $src -> $dest_dir"
+    cp "${src}" "${dest_dir}"
+    log INFO "Copied and rename: ${src} -> ${dest_dir}/${src_file}.txt"
 }
 
 append_file() {
@@ -87,8 +89,8 @@ regex_replace_file() {
 remove_file my_script
 
 append_file ./scripts/define                 my_script    
-append_file ./scripts/ui                     my_script    
-append_file ./scripts/tool                   my_script    
+append_file ./scripts/my_ui                  my_script    
+append_file ./scripts/my_tool                my_script    
 append_file ./scripts/loc_1_temple           my_script    
 append_file ./scripts/loc_2_icy_ridge        my_script    
 append_file ./scripts/loc_3_bronze_mine      my_script    
@@ -111,25 +113,38 @@ regex_replace_file my_script  "\n^$"  ""
 remove_file my_main
 
 append_file ./scripts/define my_main   
-append_str "import my_scripts/ui                   "  my_main
-append_str "import my_scripts/tool                 "  my_main
-append_str "import my_scripts/loc_1_temple         "  my_main
-append_str "import my_scripts/loc_2_icy_ridge      "  my_main
-append_str "import my_scripts/loc_3_bronze_mine    "  my_main
-append_str "import my_scripts/loc_4_undead_crypt   "  my_main
-append_str "import my_scripts/loc_5_fungus_forest  "  my_main
-append_str "import my_scripts/loc_6_caustic_caves  "  my_main
-append_str "import my_scripts/loc_7_deadwood_valley"  my_main
-append_str "import my_scripts/loc_8_rocky_plateau  "  my_main
+append_str "import Mys/MyScript"  my_main
+# append_str "import Weapons/my_ui                 "  my_main
+# append_str "import Weapons/my_tool               "  my_main
+# append_str "import Weapons/loc_1_temple          "  my_main
+# append_str "import Weapons/loc_2_icy_ridge       "  my_main
+# append_str "import Weapons/loc_3_bronze_mine     "  my_main
+# append_str "import Weapons/loc_4_undead_crypt    "  my_main
+# append_str "import Weapons/loc_5_fungus_forest   "  my_main
+# append_str "import Weapons/loc_6_caustic_caves   "  my_main
+# append_str "import Weapons/loc_7_deadwood_valley "  my_main
+# append_str "import Weapons/loc_8_rocky_plateau   "  my_main
 
-ssrpg_scripts_path="./test"
-copy_file ./scripts/ui                     ${ssrpg_scripts_path}
-copy_file ./scripts/tool                   ${ssrpg_scripts_path}
-copy_file ./scripts/loc_1_temple           ${ssrpg_scripts_path}
-copy_file ./scripts/loc_2_icy_ridge        ${ssrpg_scripts_path}
-copy_file ./scripts/loc_3_bronze_mine      ${ssrpg_scripts_path}
-copy_file ./scripts/loc_4_undead_crypt     ${ssrpg_scripts_path}
-copy_file ./scripts/loc_5_fungus_forest    ${ssrpg_scripts_path}
-copy_file ./scripts/loc_6_caustic_caves    ${ssrpg_scripts_path}
-copy_file ./scripts/loc_7_deadwood_valley  ${ssrpg_scripts_path}
-copy_file ./scripts/loc_8_rocky_plateau    ${ssrpg_scripts_path}
+remove_file MyScript.txt
+append_file ./scripts/my_ui                  MyScript.txt
+append_file ./scripts/my_tool                MyScript.txt
+append_file ./scripts/loc_1_temple           MyScript.txt
+append_file ./scripts/loc_2_icy_ridge        MyScript.txt
+append_file ./scripts/loc_3_bronze_mine      MyScript.txt
+append_file ./scripts/loc_4_undead_crypt     MyScript.txt
+append_file ./scripts/loc_5_fungus_forest    MyScript.txt
+append_file ./scripts/loc_6_caustic_caves    MyScript.txt
+append_file ./scripts/loc_7_deadwood_valley  MyScript.txt
+append_file ./scripts/loc_8_rocky_plateau    MyScript.txt
+
+copy_and_rename_file . MyScript.txt               
+# copy_and_rename_file ./scripts my_ui                   
+# copy_and_rename_file ./scripts my_tool                 
+# copy_and_rename_file ./scripts loc_1_temple         
+# copy_and_rename_file ./scripts loc_2_icy_ridge      
+# copy_and_rename_file ./scripts loc_3_bronze_mine    
+# copy_and_rename_file ./scripts loc_4_undead_crypt   
+# copy_and_rename_file ./scripts loc_5_fungus_forest  
+# copy_and_rename_file ./scripts loc_6_caustic_caves  
+# copy_and_rename_file ./scripts loc_7_deadwood_valley
+# copy_and_rename_file ./scripts loc_8_rocky_plateau  

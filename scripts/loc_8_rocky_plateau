@@ -63,10 +63,13 @@ func loc8_run()
 //高原沒有小怪, 直接跳過
 func loc8_attack()
   ?foe.distance <= 10
-    ?hp ! maxhp
-      selectEquip(dL1, dL2)
-    :
-      selectEquip(dP, dI)
+    ?BladeSkill()
+      return
+    ?hammerSkill()
+      return
+    ?bardicheSkill()
+      return
+    selectEquipT(heavy)
   :
     bashSkill()
   return
@@ -80,7 +83,7 @@ func loc8_boss_0()
     ?hp ! maxhp
       selectEquip(dL1, dL2)
     :
-      selectEquip(dP, dI)
+      selectEquip(poison1, dP)
     ?needPoison()
       selectEquip(dP, dI)
     :?needIce()
@@ -103,7 +106,7 @@ func loc8_boss_1()
     ?hp ! maxhp
       selectEquip(dL1, dL2)
     :
-      selectEquip(dP, dI)
+      selectEquip(poison1, dP)
     ?needPoison()
       selectEquip(dP, dI)
     :?needIce()
@@ -168,7 +171,8 @@ func loc8_boss_3()
     nextAttackLoop(6)
 
   //放大就后退
-  ?foe.state=115 & foe.time > 74
+  ?(foe.state=115 & foe.time > 74 & loc.stars <= 15)
+  ^ | (foe.state=115 & foe.time > 71 & loc.stars > 15)
     ?mindSkill()
       return
     :
