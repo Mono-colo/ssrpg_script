@@ -1,5 +1,5 @@
 ///////////////////    武器    ///////////////////
-//属性短剑(附魔攻速,第二附魔暴击)*2 
+//属性短剑(附魔攻速,第二附魔暴击)*2     +8, +13, +16, +20
 var poison1 = "poison sword D -shiny -long *10 +11"
 var poison2 = "poison sword D -shiny -long *10 +8"
 
@@ -72,7 +72,3 @@ var vigor_shield_A = "vigor shield A"
 var aether_shield_A = "aether shield A"
 var fire_shield_A = "fire shield A"
 var ice_shield_A = "ice shield A"
-
-
-// 叠药
-var stackPotion = false

@@ -364,18 +364,18 @@ func timing(s, t)
  return foe.state=s & foe.time>=t+iceEffect()
 var poison1 = "poison sword D -shiny -long *10 +11"
 var poison2 = "poison sword D -shiny -long *10 +8"
-var vigor1 = "vigor sword D -shiny -long *10 +10"
+var vigor1 = "vigor sword D -shiny -long *10 +11"
 var vigor2 = "vigor sword D -shiny -long *10 +9"
 var aether1 = "aether sword D -shiny -long *10 +10"
 var aether2 = "aether sword D -shiny -long *10 +9"
-var fire1 = "fire sword D -shiny -long *10 +9"
+var fire1 = "fire sword D -shiny -long *10 +10"
 var fire2 = "fire sword D -shiny -long *10 +8"
 var ice1 = "ice sword D -shiny -long *10 +9"
 var ice2 = "ice sword D -shiny -long *10 +8"
-var dP = "poison sword dP -shiny -long *10 +10"
+var dP = "poison sword dP -shiny -long *10 +11"
 var dL1 = "vigor sword dL -shiny -long *10 +11"
 var dL2 = "vigor sword dL -shiny -long *10 +10"
-var dI = "ice sword dI -shiny -long *10 +10"
+var dI = "ice sword dI -shiny -long *10 +11"
 var cross1 = "crossbow *10 +12"
 var cross2 = "crossbow *10 +11" 
 var poison_heavy_cross = "poison heavy_crossbow D -shiny"
@@ -555,14 +555,10 @@ func boss_0()
    selectEquip(dL1, dL2)
   :
    selectEquip(dP, dI)
- :
-  bashSkill()
-func boss_0_stackPotion()
- ?foe.distance <= 10
   ?needPoison()
-   selectEquip(dP, "mask")
-  :
-   selectEquip(dI, "mask")
+   selectEquip(dP, dI)
+  :?needIce()
+   selectEquip(dP, dI)
  :
   bashSkill()
 func boss_1()
@@ -571,57 +567,68 @@ func boss_1()
    selectEquip(dL1, dL2)
   :
    selectEquip(dP, dI)
+  ?needPoison()
+   selectEquip(dP, dI)
+  :?needIce()
+   selectEquip(dP, dI)
  :
   bashSkill()
 func boss_2()
- ?foe.distance <= 10
-  ?foe = "poison"
-   selectEquip(ice1, ice2)
-  :?foe = "vigor"
-   selectEquip(poison1, poison2)
-  :?foe = "aether"
-   selectEquip(vigor1, vigor2)
-  :?foe = "fire"
-   selectEquip(aether1, aether2)
-  :?foe = "ice"
-   selectEquip(fire1, fire2)
- :
-  bashSkill()
-func boss_3()
- ?(foe.state=32 | foe.state=115) & !foe.time
-  nextAttackLoop(6)
- ?timing(115, 58)
-  >`10,0, timing(115, 58)
-  ?mindSkill()
-   >`10,1, mindSkill()
-   mindSkill()
-   return
+  ?foe.distance <= 10
+    ?foe = "poison"
+      selectEquip(ice1, ice2)
+    :?foe = "vigor"
+      selectEquip(poison1, poison2)
+    :?foe = "aether"
+      selectEquip(vigor1, vigor2)
+    :?foe = "fire"
+      selectEquip(aether1, aether2)
+    :?foe = "ice"
+      selectEquip(fire1, fire2)
   :
-   >`10,2, mindSkill()
-   selectEquip(cross1, cross2)
-   return
- ?foe.distance <= 10
-  >`10,3, foe.distance <= 10
-  ?foe.hp = foe.maxhp
-   >`10,4, foe.hp = foe.maxhp
-   selectEquip("moon", dI)
-   return
-  ?item.potion ! "empty"
-   >`10,5, item.potion ! "empty"
-   activate potion
-  ?attackLoop = 2 & timing(32, 12)
-   >`10,6, attackLoop = 2 & timing(32, 12)
-   ?hammerSkill()
-    >`10,7, hammerSkill()
-    return
-  selectEquip(poison1, vigor1)
-  >`10,6, selectEquip(poison1, vigor1)
-  ?hp ! maxhp
-   >`10,7, hp ! maxhp selectEquip(dL1, dL2)
-   selectEquip(dL1, dL2)
- :
-  >`10,8, bashSkill()
-  bashSkill()
+    bashSkill()
+func boss_3()
+  ?(foe.state=32 | foe.state=115) & !foe.time
+    nextAttackLoop(6)
+  ?foe.state=115 & foe.time > 74
+    ?mindSkill()
+      return
+    :
+      selectEquip(cross1, cross2)
+      return
+  ?foe.distance <= 10
+    ?item.potion ! "empty"
+      activate potion
+    ?attackLoop = 2 & timing(32, 12)
+      ?hammerSkill()
+        return
+    ?attackLoop = 2 & timing(32, 27)
+    ^ & foe.distance < 8
+      mindSkill()
+      return
+    ?attackLoop ! 2 & timing(32, 39)
+      ?maskSkill()
+        return
+      ?needPoison()
+        selectEquip(dP, dI)
+        return
+    ?needIce()
+      selectEquip(dP, dI)
+      return
+    ?!foe.buffs.GetCount("adaptive_defense_poison")
+      selectEquip(poison1, poison2)
+    :?!foe.buffs.GetCount("adaptive_defense_vigor")
+      selectEquip(vigor1, vigor2)
+    :?!foe.buffs.GetCount("adaptive_defense_aether")
+      selectEquip(aether1, aether2)
+    :?!foe.buffs.GetCount("adaptive_defense_fire")
+      selectEquip(fire1, fire2)
+    :?!foe.buffs.GetCount("adaptive_defense_ice")
+      selectEquip(ice1, ic2)
+    ?hp ! maxhp
+      selectEquip(dL1, dL2)
+  :
+    bashSkill()
 func main()
  ?totaltime <= 1
   beginAction()

@@ -7,12 +7,6 @@
 func import_appearances_modle()
   // 导入飞行宠物模块
   import Pets/Fly
-  //import Pets/Dog
-  //import Pets/Crab
-  //import Cosmetics/Knight
-
-  // 导入自动步枪武器模块
-  import Weapons/AR
 
   // 辅助 UI
   import UI/MindstoneButton
