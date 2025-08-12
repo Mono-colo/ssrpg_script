@@ -6,8 +6,6 @@ import UI/MindstoneButton
 import UI/BetterInfo2
 
 
-
-
 ///////////////////    武器    ///////////////////
 //属性短剑(附魔攻速,第二附魔暴击)*2     +8, +13, +16, +20
 var poison1 = "poison sword D -shiny -long *10 +13"
@@ -40,11 +38,11 @@ var cross1 = "crossbow *10 +12"
 var cross2 = "crossbow *10 +11" 
 
 // 属性重弩
-var poison_heavy_cross = "poison heavy_crossbow D -shiny"
-var vigor_heavy_cross = "vigor heavy_crossbow D -shiny"
-var aether_heavy_cross = "aether heavy_crossbow D -shiny"
-var fire_heavy_cross = "fire heavy_crossbow D -shiny"
-var ice_heavy_cross = "ice heavy_crossbow D -shiny"
+var poison_heavy_cross = "poison heavy_crossbow"
+var vigor_heavy_cross = "vigor heavy_crossbow"
+var aether_heavy_cross = "aether heavy_crossbow"
+var fire_heavy_cross = "fire heavy_crossbow"
+var ice_heavy_cross = "ice heavy_crossbow"
 
 // 破甲用属性战锤(附魔破甲,第二附魔为D)*2
 var poison_hammer1 = "poison hammer D -shiny"
@@ -67,6 +65,8 @@ var ice_hammer2 = "ice hammer D -shiny"
 var bardiche = "bardiche *10"
 // 技能用大锤（附魔护甲增益降低，第二附魔持续时间）
 var heavy = "heavy hammer *10"
+// 眩晕大锤（附魔眩晕）
+var stun_heavy = "heavy hammer *10"
 
 // 回甲最快的盾 *10 +21
 var speed_shield = "compound -shiny *10"

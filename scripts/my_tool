@@ -317,7 +317,7 @@ func dashSkill()
 
 //盾衝(先用遺物盾) 遺物盾能增加盾量, 對不需要多次衝刺的目標(如boss)時可以先用遺物盾
 func bashSkill()
- //距離在16~10之間時, 嘗試使用盾衝
+ //距離在16~11之間時, 嘗試使用盾衝
  ?foe.distance > 10 & foe.distance <= 16
   ?item.GetCooldown("bash") <= 0
    selectEquip("trisk","bash")
