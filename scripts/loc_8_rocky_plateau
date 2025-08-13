@@ -51,7 +51,7 @@ func loc8_main()
 */
 func loc8_beginAction()
  //選藥水
-  brewPotion()
+  brewPotion(lucky)
 
  //第一埸開局會直接滿甲, 記得帶上限最高的盾
   selectEquip("quest",value_shield)
@@ -123,6 +123,13 @@ func loc8_attack()
 ///////////////////  小 boss  ///////////////////
 func loc8_boss_0()
   ?foe.distance <= 10
+    ?BladeSkill()
+      return
+    ?bardicheSkill()
+      return
+    ?maskSkill()
+      return
+
     ?hp ! maxhp
       selectEquip(dL1, dL2)
     :
@@ -146,6 +153,11 @@ func loc8_boss_0()
 ///////////////////   第1階段   ///////////////////
 func loc8_boss_1()
   ?foe.distance <= 10
+    ?BladeSkill()
+      return
+    ?bardicheSkill()
+      return
+
     ?hp ! maxhp
       selectEquip(dL1, dL2)
     :
@@ -171,6 +183,11 @@ func loc8_boss_1()
 ///////////////////   第2階段   ///////////////////
 func loc8_boss_2()
   ?foe.distance <= 10
+    ?BladeSkill()
+      return
+    ?bardicheSkill()
+      return
+
     ?foe = "poison"
       selectEquip(ice1, ice2)
     :?foe = "vigor"
@@ -224,6 +241,11 @@ func loc8_boss_3()
 
   // 距离够了，近战
   ?foe.distance <= 10
+    ?BladeSkill()
+      return
+    ?bardicheSkill()
+      return
+
     //喝暴擊藥打傷害
     ?item.potion ! "empty"
       activate potion
@@ -266,8 +288,9 @@ func loc8_boss_3()
       selectEquip(ice1, ic2)
 
     //吸血
-    ?hp ! maxhp
-      selectEquip(dL1, dL2)
+    ?!buffs.GetCount("lucky_mult")
+      ?hp ! maxhp
+        selectEquip(dL1, dL2)
   :
     bashSkill()
 

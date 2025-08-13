@@ -6,14 +6,12 @@ import UI/MindstoneButton
 import UI/BetterInfo2
 
 
-
-
 ///////////////////    武器    ///////////////////
 //属性短剑(附魔攻速,第二附魔暴击)*2     +8, +13, +16, +20
 var poison1 = "poison sword D -shiny -long *10 +13"
 var poison2 = "poison sword D -shiny -long *10 +8"
 
-var vigor1 = "vigor sword D -shiny -long *10 +11"
+var vigor1 = "vigor sword D -shiny -long *10 +13"
 var vigor2 = "vigor sword D -shiny -long *10 +9"
 
 var aether1 = "aether sword D -shiny -long *10 +10"
@@ -35,16 +33,32 @@ var dL2 = "vigor sword dL -shiny -long *10 +10"
 //冰 dI 短剑 *10 +21
 var dI = "ice sword dI -shiny -long *10 +11"
 
+//属性短杖(附魔攻速,第二附魔暴击)*2     +8, +13, +16, +20
+var poison_wand_1 = "poison wand D -shiny -long *10 "
+var poison_wand_2 = "poison wand D -shiny -long *10 "
+
+var vigor_wand_1 = "vigor wand D -shiny -long *10 "
+var vigor_wand_2 = "vigor wand D -shiny -long *10 "
+
+var aether_wand_1 = "aether wand D -shiny -long *10 "
+var aether_wand_2 = "aether wand D -shiny -long *10 "
+
+var fire_wand_1 = "fire wand D -shiny -long *10 "
+var fire_wand_2 = "fire wand D -shiny -long *10 "
+
+var ice_wand_1 = "ice wand D -shiny -long *10 "
+var ice_wand_2 = "ice wand D -shiny -long *10 "
+
 // 弩
 var cross1 = "crossbow *10 +12"
 var cross2 = "crossbow *10 +11" 
 
 // 属性重弩
-var poison_heavy_cross = "poison heavy_crossbow D -shiny"
-var vigor_heavy_cross = "vigor heavy_crossbow D -shiny"
-var aether_heavy_cross = "aether heavy_crossbow D -shiny"
-var fire_heavy_cross = "fire heavy_crossbow D -shiny"
-var ice_heavy_cross = "ice heavy_crossbow D -shiny"
+var poison_heavy_cross = "poison socketed_crossbow *10 +13"
+//var vigor_heavy_cross = "vigor socketed_crossbow"
+//var aether_heavy_cross = "aether socketed_crossbow"
+var fire_heavy_cross = "fire socketed_crossbow *10 +13"
+var ice_heavy_cross = "ice socketed_crossbow shiny *10 +13"
 
 // 破甲用属性战锤(附魔破甲,第二附魔为D)*2
 var poison_hammer1 = "poison hammer D -shiny"
@@ -67,6 +81,8 @@ var ice_hammer2 = "ice hammer D -shiny"
 var bardiche = "bardiche *10"
 // 技能用大锤（附魔护甲增益降低，第二附魔持续时间）
 var heavy = "heavy hammer *10"
+// 眩晕大锤（附魔眩晕）
+var stun_heavy = "heavy hammer *10"
 
 // 回甲最快的盾 *10 +21
 var speed_shield = "compound -shiny *10"

@@ -91,13 +91,13 @@ remove_file my_script
 append_file ./scripts/define                 my_script    
 append_file ./scripts/my_ui                  my_script    
 append_file ./scripts/my_tool                my_script    
-append_file ./scripts/loc_1_temple           my_script    
-append_file ./scripts/loc_2_icy_ridge        my_script    
-append_file ./scripts/loc_3_bronze_mine      my_script    
-append_file ./scripts/loc_4_undead_crypt     my_script    
-append_file ./scripts/loc_5_fungus_forest    my_script    
-append_file ./scripts/loc_6_caustic_caves    my_script    
-append_file ./scripts/loc_7_deadwood_valley  my_script    
+# append_file ./scripts/loc_1_temple           my_script    
+# append_file ./scripts/loc_2_icy_ridge        my_script    
+# append_file ./scripts/loc_3_bronze_mine      my_script    
+# append_file ./scripts/loc_4_undead_crypt     my_script    
+# append_file ./scripts/loc_5_fungus_forest    my_script    
+# append_file ./scripts/loc_6_caustic_caves    my_script    
+# append_file ./scripts/loc_7_deadwood_valley  my_script    
 append_file ./scripts/loc_8_rocky_plateau    my_script    
 
 regex_replace_file my_script  "^//.*\n"  "" 

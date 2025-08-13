@@ -3,7 +3,7 @@ import UI/MindstoneButton
 import UI/BetterInfo2
 var poison1 = "poison sword D -shiny -long *10 +13"
 var poison2 = "poison sword D -shiny -long *10 +8"
-var vigor1 = "vigor sword D -shiny -long *10 +11"
+var vigor1 = "vigor sword D -shiny -long *10 +13"
 var vigor2 = "vigor sword D -shiny -long *10 +9"
 var aether1 = "aether sword D -shiny -long *10 +10"
 var aether2 = "aether sword D -shiny -long *10 +9"
@@ -15,13 +15,21 @@ var dP = "poison sword dP -shiny -long *10 +13"
 var dL1 = "vigor sword dL -shiny -long *10 +13"
 var dL2 = "vigor sword dL -shiny -long *10 +10"
 var dI = "ice sword dI -shiny -long *10 +11"
+var poison_wand_1 = "poison wand D -shiny -long *10 "
+var poison_wand_2 = "poison wand D -shiny -long *10 "
+var vigor_wand_1 = "vigor wand D -shiny -long *10 "
+var vigor_wand_2 = "vigor wand D -shiny -long *10 "
+var aether_wand_1 = "aether wand D -shiny -long *10 "
+var aether_wand_2 = "aether wand D -shiny -long *10 "
+var fire_wand_1 = "fire wand D -shiny -long *10 "
+var fire_wand_2 = "fire wand D -shiny -long *10 "
+var ice_wand_1 = "ice wand D -shiny -long *10 "
+var ice_wand_2 = "ice wand D -shiny -long *10 "
 var cross1 = "crossbow *10 +12"
 var cross2 = "crossbow *10 +11" 
-var poison_heavy_cross = "poison heavy_crossbow D -shiny"
-var vigor_heavy_cross = "vigor heavy_crossbow D -shiny"
-var aether_heavy_cross = "aether heavy_crossbow D -shiny"
-var fire_heavy_cross = "fire heavy_crossbow D -shiny"
-var ice_heavy_cross = "ice heavy_crossbow D -shiny"
+var poison_heavy_cross = "poison socketed_crossbow *10 +13"
+var fire_heavy_cross = "fire socketed_crossbow *10 +13"
+var ice_heavy_cross = "ice socketed_crossbow shiny *10 +13"
 var poison_hammer1 = "poison hammer D -shiny"
 var poison_hammer2 = "poison hammer D -shiny"
 var vigor_hammer1 = "vigor hammer D -shiny"
@@ -34,6 +42,7 @@ var ice_hammer1 = "ice hammer D -shiny"
 var ice_hammer2 = "ice hammer D -shiny"
 var bardiche = "bardiche *10"
 var heavy = "heavy hammer *10"
+var stun_heavy = "heavy hammer *10"
 var speed_shield = "compound -shiny *10"
 var speed_shield_value = 14
 var value_shield = "compound shiny * 10"
@@ -374,9 +383,12 @@ func getPotionTime()
  ?buffs.GetTime("experience") 
   return buffs.GetTime("experience")
  return 0
-func brewPotion()
- brew stone + bronze 
- return
+func brewPotion(pstr)
+  ?pstr = lucky
+    brew stone + bronze 
+  ?pstr = strength
+    brew tar + stone 
+  return
 func needFire() 
  return 
  ^foe.debuffs.GetTime("debuff_dot") <= 10
@@ -403,103 +415,6 @@ func nextAttackLoop(loopCount)
  return attackLoop
 func timing(s, t)
  return foe.state=s & foe.time>=t+iceEffect()
-?loc = temple
-  aac()   
-  ?summon_talisman(aether)
-    loadout ice_heavy_cross
-    ?foe = boss
-      loadout 4
-  activate_potion_flow_health(30)
-  active_skill_blade_of_god()
-  ?loc ! temple
-    active_skill_cult_mask()
-  equip_star_stone()
-  equip_collection_tool()       
-?loc = icy_ridge
-  aac()   
-  ?summon_talisman(aether)
-    loadout 6
-    ?foe = boss
-      loadout 6
-  activate_potion_flow_health(30)
-  active_skill_blade_of_god()
-  ?loc ! temple
-    active_skill_cult_mask()
-  equip_star_stone()
-  equip_collection_tool()       
-?loc = bronze_mine
-  aac()
-  ?summon_talisman(aether)
-    ?foe.distance >= 11
-    ^ &foe ! boss
-      equip_dash_and_bash()
-    :
-      > dis < 11
-      loadout 1
-      ?foe = boss
-        loadout 3
-  ?foe = boss
-    activate_potion_flow_health(31)
-  activate_potion_flow_health(30)
-  active_skill_blade_of_god()
-  ?loc ! temple
-    active_skill_cult_mask()
-  equip_star_stone()
-  equip_collection_tool()       
-:?loc = undead_crypt    
-  aac()
-  ?summon_talisman(aether) 
-    loadout 8
-  activate_potion_flow_health(30)
-  active_skill_blade_of_god()
-  ?loc ! temple
-    active_skill_cult_mask()
-  equip_star_stone()
-  equip_collection_tool()       
-?loc = fungus_forest
-  aac()
-  ?summon_talisman(aether)
-    loadout 4
-    ?foe = boss
-      loadout 9
-  activate_potion_flow_health(30)
-  active_skill_blade_of_god()
-  ?loc ! temple
-    active_skill_cult_mask()
-  equip_star_stone()
-  equip_collection_tool()       
-?loc = caustic_caves
-  aac()
-  ?summon_talisman(aether)
-    ?foe.distance >= 11
-      equip_dash_and_bash()
-    :
-      > dis < 11
-      loadout 3
-      ?foe = boss
-        loadout 9
-  activate_potion_flow_health(30)
-  active_skill_blade_of_god()
-  ?loc ! temple
-    active_skill_cult_mask()
-  equip_star_stone()
-  equip_collection_tool()
-?loc = deadwood_valley
-  aac()
-  ?summon_talisman(aether) 
-    ?foe.distance >= 11
-      loadout 9
-    :
-      > dis < 11
-      loadout 9
-      ?foe = boss
-        loadout 7
-  activate_potion_flow_health(30)
-  active_skill_blade_of_god()
-  ?loc ! temple
-    active_skill_cult_mask()
-  equip_star_stone()
-  equip_collection_tool()       
 ?loc = rocky_plateau
   aac()
   ?foe.distance > 25
@@ -528,6 +443,29 @@ func timing(s, t)
       loc8_attack()
   loc8_main()
   changeEquip()
+func loc8_main()
+  ?totaltime <= 1
+    loc8_beginAction()
+  :
+    loc8_action()
+func loc8_beginAction()
+  brewPotion(lucky)
+  selectEquip("quest",value_shield)
+  checkStackPotion()
+  bossStart = false
+func loc8_action()
+  ?foe = phase1 & foe.hp ! foe.maxhp
+    bossStart = true
+  cinderwispSkill()
+  ?starPickup()
+    return
+  ?!ai.enabled | ai.paused
+    resetAttackLoop()
+    ?stackPotion
+      selectEquip("quest", "mask")
+    :
+      restoreArmor("quest")
+    return
 func loc8_run()
   ?quarterstaffSkill()
     return
@@ -549,10 +487,14 @@ func loc8_attack()
   :
     bashSkill()
   return
-func loc8_attack_stackPotion()
-  return
 func loc8_boss_0()
   ?foe.distance <= 10
+    ?BladeSkill()
+      return
+    ?bardicheSkill()
+      return
+    ?maskSkill()
+      return
     ?hp ! maxhp
       selectEquip(dL1, dL2)
     :
@@ -565,6 +507,10 @@ func loc8_boss_0()
     bashSkill()
 func loc8_boss_1()
   ?foe.distance <= 10
+    ?BladeSkill()
+      return
+    ?bardicheSkill()
+      return
     ?hp ! maxhp
       selectEquip(dL1, dL2)
     :
@@ -577,6 +523,10 @@ func loc8_boss_1()
     bashSkill()
 func loc8_boss_2()
   ?foe.distance <= 10
+    ?BladeSkill()
+      return
+    ?bardicheSkill()
+      return
     ?foe = "poison"
       selectEquip(ice1, ice2)
     :?foe = "vigor"
@@ -600,6 +550,10 @@ func loc8_boss_3()
       selectEquip(cross1, cross2)
       return
   ?foe.distance <= 10
+    ?BladeSkill()
+      return
+    ?bardicheSkill()
+      return
     ?item.potion ! "empty"
       activate potion
     ?attackLoop = 2 & timing(32, 12)
@@ -628,30 +582,8 @@ func loc8_boss_3()
       selectEquip(fire1, fire2)
     :?!foe.buffs.GetCount("adaptive_defense_ice")
       selectEquip(ice1, ic2)
-    ?hp ! maxhp
-      selectEquip(dL1, dL2)
+    ?!buffs.GetCount("lucky_mult")
+      ?hp ! maxhp
+        selectEquip(dL1, dL2)
   :
     bashSkill()
-func loc8_main()
-  ?totaltime <= 1
-    loc8_beginAction()
-  :
-    loc8_action()
-func loc8_beginAction()
-  brewPotion()
-  selectEquip("quest",value_shield)
-  checkStackPotion()
-  bossStart = false
-func loc8_action()
-  ?foe = phase1 & foe.hp ! foe.maxhp
-    bossStart = true
-  cinderwispSkill()
-  ?starPickup()
-    return
-  ?!ai.enabled | ai.paused
-    resetAttackLoop()
-    ?stackPotion
-      selectEquip("quest", "mask")
-    :
-      restoreArmor("quest")
-    return

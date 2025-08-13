@@ -339,7 +339,7 @@ func dashSkill()
 
 //盾衝(先用遺物盾) 遺物盾能增加盾量, 對不需要多次衝刺的目標(如boss)時可以先用遺物盾
 func bashSkill()
- //距離在16~10之間時, 嘗試使用盾衝
+ //距離在16~11之間時, 嘗試使用盾衝
  ?foe.distance > 10 & foe.distance <= 16
   ?item.GetCooldown("bash") <= 0
    selectEquip("trisk","bash")
@@ -521,18 +521,20 @@ func getPotionTime()
  return 0
 
 //選藥, 放在一起方便改
-func brewPotion()
- brew stone + bronze //lucky(爆擊)
- //brew wood + bronze //berserk(攻速)
- //brew tar + bronze //vampiric(吸血)
- //brew stone //strength(擊暈+破甲)
- //brew stone + wood //invisibility(閃避)
- //brew tar + wood //cleansing(清debuff)
- //brew tar + stone //strength(回甲)
- //brew tar //healing(回血)
- //brew bronze //lightning(aoe傷害)
- //brew wood //experience(經驗)
- return
+func brewPotion(pstr)
+  ?pstr = lucky
+    brew stone + bronze //lucky(爆擊)
+  //brew wood + bronze //berserk(攻速)
+  //brew tar + bronze //vampiric(吸血)
+  //brew stone //strength(擊暈+破甲)
+  //brew stone + wood //invisibility(閃避)
+  //brew tar + wood //cleansing(清debuff)
+  ?pstr = strength
+    brew tar + stone //strength(回甲)
+  //brew tar //healing(回血)
+  //brew bronze //lightning(aoe傷害)
+  //brew wood //experience(經驗)
+  return
 ///////////////////   資料計算   ///////////////////
 /*
  單個+15短劍攻速為7f一次, 長杖為5f一次
@@ -770,6 +772,135 @@ func timing(s, t)
 
   // 装备采集工具
   equip_collection_tool()// 意念之石启动之后,可以持续执行它所收到的指令.
+
+
+?loc = caustic_caves
+  // 取消后摇
+  aac()
+
+  // 行走与战斗
+  ?foe.distance > 25
+    loc6_run()
+  :?foe.distance > 23
+    restoreArmor_element()
+  :?stackPotion
+    ?foe = phase1
+      loc6_boss_1_stackPotion()
+    :?foe = boss
+      loc6_boss_0_stackPotion()
+    :
+      loc6_attack_stackPotion() 
+  :
+    ?foe = phase1
+      loc6_boss_1()
+    :?foe = boss
+      loc6_boss_0()
+    :
+      loc6_attack()
+
+  // 开局操作
+  loc6_main()
+
+  // 更换装备
+  changeEquip()
+
+///////////////////   开局阶段   ///////////////////
+func loc6_main()
+  ?totaltime <= 1
+    loc6_beginAction()
+  :
+    loc6_action()
+/* 開局行動
+ 當第一場開局時可以設定藥水和直接滿甲
+ 並且這時候大部分行動和技能都不能使用
+ 因此這部分獨立執行
+*/
+func loc6_beginAction()
+ //選藥水
+  brewPotion(strength)
+
+ //第一埸開局會直接滿甲, 記得帶上限最高的盾
+  selectEquip("quest",value_shield)
+
+  checkStackPotion()
+
+  bossStart = false
+//行动
+func loc6_action()
+  ?foe = phase1 & foe.hp ! foe.maxhp
+    bossStart = true
+
+  //火精靈技能(能用就用, 不能用也不要緊)
+  cinderwispSkill()
+
+  //吸取掉落物
+  ?starPickup()
+    return
+
+  //動畫中回甲
+  ?!ai.enabled | ai.paused
+    //重置循環計算
+    resetAttackLoop()
+
+    ?stackPotion
+      selectEquip("quest", "mask")
+    :
+      restoreArmor("quest")
+
+    return
+///////////////////    行走    ///////////////////
+func loc6_run()
+  // 木棒加速
+  ?quarterstaffSkill()
+    return
+
+  // 召唤火精靈
+  ?fire_talismanSkill()
+    return
+
+  // 開始疊藥
+  // useStackPotion()
+
+  // 如果在疊藥就拿面具, 否則拿盾回甲
+  ?stackPotion
+    selectEquip("trisk", "mask")
+  :
+    restoreArmor("trisk")
+
+///////////////////    小怪    ///////////////////
+func loc6_attack()
+  ?foe.count > 7
+    ?BladeSkill()
+      return
+  selectEquipT(ice_heavy_cross)
+
+///////////////////  小 boss  ///////////////////
+func loc6_boss_0()
+  ?foe.distance <= 10
+    ?BladeSkill()
+      return
+    ?bardicheSkill()
+      return
+    ?hammerSkill()
+      return
+    selectEquipT(stun_heavy)
+  :
+    bashSkill()
+
+///////////////////   第1階段   ///////////////////
+func loc6_boss_1()
+  ?BladeSkill()
+    return
+  ?bardicheSkill()
+    return
+  ?maskSkill()
+    return
+
+  //喝暴擊藥打傷害
+  ?item.potion ! "empty"
+    activate potion
+
+  selectEquipT(ice_heavy_cross)
 // 峡谷
 
 ?loc = deadwood_valley
@@ -844,6 +975,50 @@ func timing(s, t)
   // 更换装备
   changeEquip()
 
+///////////////////   开局阶段   ///////////////////
+func loc8_main()
+  ?totaltime <= 1
+    loc8_beginAction()
+  :
+    loc8_action()
+/* 開局行動
+ 當第一場開局時可以設定藥水和直接滿甲
+ 並且這時候大部分行動和技能都不能使用
+ 因此這部分獨立執行
+*/
+func loc8_beginAction()
+ //選藥水
+  brewPotion(lucky)
+
+ //第一埸開局會直接滿甲, 記得帶上限最高的盾
+  selectEquip("quest",value_shield)
+
+  checkStackPotion()
+
+  bossStart = false
+//行动
+func loc8_action()
+  ?foe = phase1 & foe.hp ! foe.maxhp
+    bossStart = true
+
+  //火精靈技能(能用就用, 不能用也不要緊)
+  cinderwispSkill()
+
+  //吸取掉落物
+  ?starPickup()
+    return
+
+  //動畫中回甲
+  ?!ai.enabled | ai.paused
+    //重置循環計算
+    resetAttackLoop()
+
+    ?stackPotion
+      selectEquip("quest", "mask")
+    :
+      restoreArmor("quest")
+
+    return
 
 ///////////////////    行走    ///////////////////
 func loc8_run()
@@ -866,7 +1041,6 @@ func loc8_run()
 
 
 ///////////////////    小怪    ///////////////////
-//高原沒有小怪, 直接跳過
 func loc8_attack()
   ?foe.distance <= 10
     ?BladeSkill()
@@ -880,12 +1054,19 @@ func loc8_attack()
     bashSkill()
   return
 
-func loc8_attack_stackPotion()
-  return
+// func loc8_attack_stackPotion()
+//   return
 
 ///////////////////  小 boss  ///////////////////
 func loc8_boss_0()
   ?foe.distance <= 10
+    ?BladeSkill()
+      return
+    ?bardicheSkill()
+      return
+    ?maskSkill()
+      return
+
     ?hp ! maxhp
       selectEquip(dL1, dL2)
     :
@@ -909,6 +1090,11 @@ func loc8_boss_0()
 ///////////////////   第1階段   ///////////////////
 func loc8_boss_1()
   ?foe.distance <= 10
+    ?BladeSkill()
+      return
+    ?bardicheSkill()
+      return
+
     ?hp ! maxhp
       selectEquip(dL1, dL2)
     :
@@ -934,6 +1120,11 @@ func loc8_boss_1()
 ///////////////////   第2階段   ///////////////////
 func loc8_boss_2()
   ?foe.distance <= 10
+    ?BladeSkill()
+      return
+    ?bardicheSkill()
+      return
+
     ?foe = "poison"
       selectEquip(ice1, ice2)
     :?foe = "vigor"
@@ -987,6 +1178,11 @@ func loc8_boss_3()
 
   // 距离够了，近战
   ?foe.distance <= 10
+    ?BladeSkill()
+      return
+    ?bardicheSkill()
+      return
+
     //喝暴擊藥打傷害
     ?item.potion ! "empty"
       activate potion
@@ -1029,8 +1225,9 @@ func loc8_boss_3()
       selectEquip(ice1, ic2)
 
     //吸血
-    ?hp ! maxhp
-      selectEquip(dL1, dL2)
+    ?!buffs.GetCount("lucky_mult")
+      ?hp ! maxhp
+        selectEquip(dL1, dL2)
   :
     bashSkill()
 
@@ -1084,47 +1281,3 @@ func loc8_boss_3()
 //   bashSkill()
 
 
-///////////////////   开局阶段   ///////////////////
-func loc8_main()
-  ?totaltime <= 1
-    loc8_beginAction()
-  :
-    loc8_action()
-/* 開局行動
- 當第一場開局時可以設定藥水和直接滿甲
- 並且這時候大部分行動和技能都不能使用
- 因此這部分獨立執行
-*/
-func loc8_beginAction()
- //選藥水
-  brewPotion()
-
- //第一埸開局會直接滿甲, 記得帶上限最高的盾
-  selectEquip("quest",value_shield)
-
-  checkStackPotion()
-
-  bossStart = false
-//行动
-func loc8_action()
-  ?foe = phase1 & foe.hp ! foe.maxhp
-    bossStart = true
-
-  //火精靈技能(能用就用, 不能用也不要緊)
-  cinderwispSkill()
-
-  //吸取掉落物
-  ?starPickup()
-    return
-
-  //動畫中回甲
-  ?!ai.enabled | ai.paused
-    //重置循環計算
-    resetAttackLoop()
-
-    ?stackPotion
-      selectEquip("quest", "mask")
-    :
-      restoreArmor("quest")
-
-    return

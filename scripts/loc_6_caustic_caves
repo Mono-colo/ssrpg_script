@@ -77,7 +77,7 @@ func loc6_main()
 */
 func loc6_beginAction()
  //選藥水
-  brewPotion()
+  brewPotion(strength)
 
  //第一埸開局會直接滿甲, 記得帶上限最高的盾
   selectEquip("quest",value_shield)
@@ -137,34 +137,27 @@ func loc6_attack()
 ///////////////////  小 boss  ///////////////////
 func loc6_boss_0()
   ?foe.distance <= 10
+    ?BladeSkill()
+      return
+    ?bardicheSkill()
+      return
+    ?hammerSkill()
+      return
     selectEquipT(stun_heavy)
-    return
   :
     bashSkill()
 
 ///////////////////   第1階段   ///////////////////
 func loc6_boss_1()
-  ?foe.distance <= 10
-    ?BladeSkill()
-      return
-    ?hammerSkill()
-      return
-    ?bardicheSkill()
-      return
-    ?maskSkill()
-      return
+  ?BladeSkill()
+    return
+  ?bardicheSkill()
+    return
+  ?maskSkill()
+    return
 
-    //喝暴擊藥打傷害
-    ?item.potion ! "empty"
-      activate potion
+  //喝暴擊藥打傷害
+  ?item.potion ! "empty"
+    activate potion
 
-    ?hp ! maxhp
-      selectEquip(dL1, dL2)
-    :
-      selectEquip(ice1, ice2)
-    ?needPoison()
-      selectEquip(dP, dI)
-    :?needIce()
-      selectEquip(dP, dI)
-  :
-    bashSkill()
+  selectEquipT(ice_heavy_cross)
