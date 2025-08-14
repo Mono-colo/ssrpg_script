@@ -288,9 +288,11 @@ func loc8_boss_3()
       selectEquip(ice1, ic2)
 
     //吸血
-    ?!buffs.GetCount("lucky_mult")
-      ?hp ! maxhp
-        selectEquip(dL1, dL2)
+    // ?!buffs.GetCount("lucky_mult")
+    //   ?hp ! maxhp
+    //     selectEquip(dL1, dL2)
+    :?hp < 20
+      selectEquip(dL1, dL2)
   :
     bashSkill()
 

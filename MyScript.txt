@@ -220,7 +220,8 @@ func restoreArmor_element()
 func BladeSkill()
  ?item.GetCooldown("blade") <= 0 &
  ^foe.distance <= 23 & //最遠攻擊距離, 防止連怪都沒看到就開技能
- ^item.CanActivate()
+ ^item.CanActivate() &
+ ^foe.hp > 0
   selectEquipT("blade")
   equip blade
   activate R
@@ -593,30 +594,30 @@ func timing(s, t)
 ?loc = temple
 
   aac()   
-  ?summon_talisman(aether)
-    loadout ice_heavy_cross
-    ?foe = boss
-      loadout 4
 
-    
-  // 当生命值低于 30 时激活技能P（使用药水）
-  activate_potion_flow_health(30)
+  // 行走与战斗
+  ?foe.distance > 25
+    loc6_run()
+  :?stackPotion
+    ?foe = phase1
+      loc6_boss_1_stackPotion()
+    :?foe = boss
+      loc6_boss_0_stackPotion()
+    :
+      loc6_attack_stackPotion() 
+  :
+    ?foe = phase1
+      selectEquipT(ice_heavy_cross)
+    :?foe = boss
+      selectEquipT(ice_heavy_cross)
+    :
+      selectEquipT(ice_heavy_cross)
 
-  // 堕神之刃
-  // 当blade技能冷却结束且(敌人数量>5或敌人是boss)且物品可激活时,装备堕神之刃并激活R技能
-  active_skill_blade_of_god()
+  // 开局操作
+  loc6_main()
 
-  // 面具
-  // 当mask技能冷却结束且面对Boss且距离<25且物品可激活时,装备邪教面具并激活R技能
-  ?loc ! temple
-    active_skill_cult_mask()
-
-  // 当无敌人且拾取物距离<=22时切换 星石
-  equip_star_stone()
-
-  // 装备采集工具
-  equip_collection_tool()       // 意念之石启动之后,可以持续执行它所收到的指令.
-// 雪山
+  // 更换装备
+  changeEquip()// 雪山
 
 ?loc = icy_ridge
 
@@ -717,7 +718,7 @@ func timing(s, t)
   ?summon_talisman(aether)
     loadout 4
     ?foe = boss
-      loadout 9
+      loadout 5
 
 
   // 当生命值低于 30 时激活技能P（使用药水）
@@ -739,40 +740,6 @@ func timing(s, t)
   // 装备采集工具
   equip_collection_tool()       // 意念之石启动之后,可以持续执行它所收到的指令.
 // 洞穴
-
-?loc = caustic_caves
-
-  aac()
-  ?summon_talisman(aether)
-    ?foe.distance >= 11
-      equip_dash_and_bash()
-    :
-      > dis < 11
-      //equip_skeleton_arm()
-      loadout 3
-      ?foe = boss
-        loadout 9
-
-
-  // 当生命值低于 30 时激活技能P（使用药水）
-  activate_potion_flow_health(30)
-
-
-  // 堕神之刃
-  // 当blade技能冷却结束且(敌人数量>5或敌人是boss)且物品可激活时,装备堕神之刃并激活R技能
-  active_skill_blade_of_god()
-
-  // 面具
-  // 当mask技能冷却结束且面对Boss且距离<25且物品可激活时,装备邪教面具并激活R技能
-  ?loc ! temple
-    active_skill_cult_mask()
-
-  // 当无敌人且拾取物距离<=22时切换 星石
-  equip_star_stone()
-
-  // 装备采集工具
-  equip_collection_tool()// 意念之石启动之后,可以持续执行它所收到的指令.
-
 
 ?loc = caustic_caves
   // 取消后摇
@@ -1225,9 +1192,11 @@ func loc8_boss_3()
       selectEquip(ice1, ic2)
 
     //吸血
-    ?!buffs.GetCount("lucky_mult")
-      ?hp ! maxhp
-        selectEquip(dL1, dL2)
+    // ?!buffs.GetCount("lucky_mult")
+    //   ?hp ! maxhp
+    //     selectEquip(dL1, dL2)
+    :?hp < 20
+      selectEquip(dL1, dL2)
   :
     bashSkill()
 

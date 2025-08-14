@@ -198,7 +198,8 @@ func restoreArmor_element()
 func BladeSkill()
  ?item.GetCooldown("blade") <= 0 &
  ^foe.distance <= 23 & //最遠攻擊距離, 防止連怪都沒看到就開技能
- ^item.CanActivate()
+ ^item.CanActivate() &
+ ^foe.hp > 0
   selectEquipT("blade")
   equip blade
   activate R

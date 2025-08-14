@@ -6,7 +6,7 @@
   ?summon_talisman(aether)
     loadout 4
     ?foe = boss
-      loadout 9
+      loadout 5
 
 
   // 当生命值低于 30 时激活技能P（使用药水）

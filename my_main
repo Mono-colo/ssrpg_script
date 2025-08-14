@@ -31,7 +31,7 @@ var dL1 = "vigor sword dL -shiny -long *10 +13"
 var dL2 = "vigor sword dL -shiny -long *10 +10"
 
 //冰 dI 短剑 *10 +21
-var dI = "ice sword dI -shiny -long *10 +11"
+var dI = "ice sword dI -shiny -long *10 +13"
 
 //属性短杖(附魔攻速,第二附魔暴击)*2     +8, +13, +16, +20
 var poison_wand_1 = "poison wand D -shiny -long *10 "
@@ -54,10 +54,10 @@ var cross1 = "crossbow *10 +12"
 var cross2 = "crossbow *10 +11" 
 
 // 属性重弩
-var poison_heavy_cross = "poison socketed_crossbow *10 +13"
+var poison_heavy_cross = "poison socketed_crossbow shiny *10 +13"
 //var vigor_heavy_cross = "vigor socketed_crossbow"
 //var aether_heavy_cross = "aether socketed_crossbow"
-var fire_heavy_cross = "fire socketed_crossbow *10 +13"
+var fire_heavy_cross = "fire socketed_crossbow shiny *10 +13"
 var ice_heavy_cross = "ice socketed_crossbow shiny *10 +13"
 
 // 破甲用属性战锤(附魔破甲,第二附魔为D)*2
