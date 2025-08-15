@@ -20,7 +20,7 @@ var aether2 = "aether sword D -shiny -long *10 +9"
 var fire1 = "fire sword D -shiny -long *10 +10"
 var fire2 = "fire sword D -shiny -long *10 +8"
 
-var ice1 = "ice sword D -shiny -long *10 +9"
+var ice1 = "ice sword D -shiny -long *10 +13"
 var ice2 = "ice sword D -shiny -long *10 +8"
 
 //毒 dP 短剑 *10 +21

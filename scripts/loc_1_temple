@@ -16,14 +16,49 @@
       loc6_attack_stackPotion() 
   :
     ?foe = phase1
-      selectEquipT(ice_heavy_cross)
+      ?foe.distance <= 10
+        ?BladeSkill()
+          return
+        ?bardicheSkill()
+          return
+        ?maskSkill()
+          return
+
+        ?hp ! maxhp
+          selectEquip(dL1, dL2)
+        :
+          selectEquip(ice1, ice2)
+        ?needPoison()
+          selectEquip(dP, dI)
+        :?needIce()
+          selectEquip(dP, dI)
+      :
+        bashSkill()
+
     :?foe = boss
-      selectEquipT(ice_heavy_cross)
+      ?foe.distance <= 10
+        ?BladeSkill()
+          return
+        ?bardicheSkill()
+          return
+        ?maskSkill()
+          return
+
+        ?hp ! maxhp
+          selectEquip(dL1, dL2)
+        :
+          selectEquip(ice1, ice2)
+        ?needPoison()
+          selectEquip(dP, dI)
+        :?needIce()
+          selectEquip(dP, dI)
+      :
+        bashSkill()
     :
       selectEquipT(ice_heavy_cross)
 
   // 开局操作
-  loc6_main()
+  loc1_main()
 
   // 更换装备
   changeEquip()
