@@ -1,5 +1,6 @@
 // 导入宠物模块
 import Pets/Fly
+import Pets/Spider
 
 // 辅助 UI
 import UI/MindstoneButton
@@ -60,6 +61,9 @@ var poison_heavy_cross = "poison socketed_crossbow shiny *10 +13"
 var fire_heavy_cross = "fire socketed_crossbow shiny *10 +13"
 var ice_heavy_cross = "ice socketed_crossbow shiny *10 +13"
 
+// 减速冰冻重弩(附魔穿刺,第二附魔为攻速)
+var ice_heavy_cross1 = "ice socketed_crossbow shiny *10 +13"
+
 // 破甲用属性战锤(附魔破甲,第二附魔为D)*2
 // 也可以用来打弱眩晕的 loc6_boss0, loc7_boss1
 var poison_hammer1 = "poison hammer D -shiny"
@@ -76,6 +80,9 @@ var fire_hammer2 = "fire hammer D -shiny"
 
 var ice_hammer1 = "ice hammer D -shiny"
 var ice_hammer2 = "ice hammer D -shiny"
+
+// 属性用属性战锤(附魔D,第二附魔为攻速)*2
+var ice_hammer3 = "ice hammer D -shiny *10 +7"
 
 
 // 技能用月刃斧（附魔暴击，第二附魔攻击）

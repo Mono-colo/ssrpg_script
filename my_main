@@ -1,5 +1,6 @@
 // 导入宠物模块
 import Pets/Fly
+import Pets/Spider
 
 // 辅助 UI
 import UI/MindstoneButton
@@ -53,7 +54,7 @@ var ice_wand_2 = "ice wand D -shiny -long *10 "
 var cross1 = "crossbow *10 +12"
 var cross2 = "crossbow *10 +11" 
 
-// 属性重弩
+// 属性重弩(附魔暴击,第二附魔为攻速)
 var poison_heavy_cross = "poison socketed_crossbow shiny *10 +13"
 //var vigor_heavy_cross = "vigor socketed_crossbow"
 //var aether_heavy_cross = "aether socketed_crossbow"
@@ -61,6 +62,7 @@ var fire_heavy_cross = "fire socketed_crossbow shiny *10 +13"
 var ice_heavy_cross = "ice socketed_crossbow shiny *10 +13"
 
 // 破甲用属性战锤(附魔破甲,第二附魔为D)*2
+// 也可以用来打弱眩晕的 loc6_boss0, loc7_boss1
 var poison_hammer1 = "poison hammer D -shiny"
 var poison_hammer2 = "poison hammer D -shiny"
 
@@ -76,13 +78,14 @@ var fire_hammer2 = "fire hammer D -shiny"
 var ice_hammer1 = "ice hammer D -shiny"
 var ice_hammer2 = "ice hammer D -shiny"
 
+// 属性用属性战锤(附魔D,第二附魔为攻速)*2
+var ice_hammer3 = "ice hammer D -shiny *10 +7"
+
 
 // 技能用月刃斧（附魔暴击，第二附魔攻击）
 var bardiche = "bardiche *10"
 // 技能用大锤（附魔护甲增益降低，第二附魔持续时间）
 var heavy = "heavy hammer *10"
-// 眩晕大锤（附魔眩晕）
-var stun_heavy = "heavy hammer *10"
 
 // 回甲最快的盾 *10 +21
 var speed_shield = "compound -shiny *10"
@@ -100,3 +103,4 @@ var fire_shield_A = "fire shield A"
 var ice_shield_A = "ice shield A"
 
 import Mys/MyScript
+import Weapons/loc_6_caustic_caves   

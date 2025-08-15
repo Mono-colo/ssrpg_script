@@ -525,16 +525,16 @@ func getPotionTime()
 func brewPotion(pstr)
   ?pstr = lucky
     brew stone + bronze //lucky(爆擊)
-  //brew wood + bronze //berserk(攻速)
-  //brew tar + bronze //vampiric(吸血)
-  //brew stone //strength(擊暈+破甲)
-  //brew stone + wood //invisibility(閃避)
-  //brew tar + wood //cleansing(清debuff)
+  //brew wood + bronze  //berserk(攻速)
+  //brew tar + bronze   //vampiric(吸血)
+  //brew stone          //strength(擊暈+破甲)
+  //brew stone + wood   //invisibility(閃避)
+  //brew tar + wood     //cleansing(清debuff)
   ?pstr = strength
-    brew tar + stone //strength(回甲)
-  //brew tar //healing(回血)
-  //brew bronze //lightning(aoe傷害)
-  //brew wood //experience(經驗)
+    brew tar + stone    //strength(回甲)
+  //brew tar            //healing(回血)
+  //brew bronze         //lightning(aoe傷害)
+  //brew wood           //experience(經驗)
   return
 ///////////////////   資料計算   ///////////////////
 /*
@@ -832,8 +832,8 @@ func loc6_action()
   ?foe = phase1 & foe.hp ! foe.maxhp
     bossStart = true
 
-  //火精靈技能(能用就用, 不能用也不要緊)
-  cinderwispSkill()
+  // //火精靈技能(能用就用, 不能用也不要緊)
+  // cinderwispSkill()
 
   //吸取掉落物
   ?starPickup()
@@ -858,6 +858,7 @@ func loc6_run()
 
   // 召唤火精靈
   ?fire_talismanSkill()
+  // ?aether_talismanSkill()
     return
 
   // 開始疊藥
@@ -883,17 +884,13 @@ func loc6_boss_0()
       return
     ?bardicheSkill()
       return
-    ?hammerSkill()
-      return
-    selectEquipT(stun_heavy)
+    selectEquip(ice_hammer3,ice1)
   :
     bashSkill()
 
 ///////////////////   第1階段   ///////////////////
 func loc6_boss_1()
   ?BladeSkill()
-    return
-  ?bardicheSkill()
     return
   ?maskSkill()
     return

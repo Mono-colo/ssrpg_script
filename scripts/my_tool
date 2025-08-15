@@ -503,16 +503,16 @@ func getPotionTime()
 func brewPotion(pstr)
   ?pstr = lucky
     brew stone + bronze //lucky(爆擊)
-  //brew wood + bronze //berserk(攻速)
-  //brew tar + bronze //vampiric(吸血)
-  //brew stone //strength(擊暈+破甲)
-  //brew stone + wood //invisibility(閃避)
-  //brew tar + wood //cleansing(清debuff)
+  //brew wood + bronze  //berserk(攻速)
+  //brew tar + bronze   //vampiric(吸血)
+  //brew stone          //strength(擊暈+破甲)
+  //brew stone + wood   //invisibility(閃避)
+  //brew tar + wood     //cleansing(清debuff)
   ?pstr = strength
-    brew tar + stone //strength(回甲)
-  //brew tar //healing(回血)
-  //brew bronze //lightning(aoe傷害)
-  //brew wood //experience(經驗)
+    brew tar + stone    //strength(回甲)
+  //brew tar            //healing(回血)
+  //brew bronze         //lightning(aoe傷害)
+  //brew wood           //experience(經驗)
   return
 ///////////////////   資料計算   ///////////////////
 /*
