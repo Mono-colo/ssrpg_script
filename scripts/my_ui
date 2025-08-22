@@ -20,4 +20,6 @@ asciiend
 >`10,8,状态:@foe.state@
 >`17,8,时间:@foe.time@
 >`10,9,距离:@foe.distance@
+>`10,10,名字:@foe@
+>`10,11,数量:@foe.count@
 //>`10,9,DEBUFF:@foe.debuffs.string@

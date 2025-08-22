@@ -65,7 +65,8 @@ func loc8_action()
     bossStart = true
 
   //火精靈技能(能用就用, 不能用也不要緊)
-  cinderwispSkill()
+  ?foe.hp <= 750
+    cinderwispSkill_count(15)
 
   //吸取掉落物
   ?starPickup()
@@ -105,6 +106,10 @@ func loc8_run()
 
 ///////////////////    小怪    ///////////////////
 func loc8_attack()
+  ?foe.count >= 6
+    selectEquipT(socketed_crossbow)
+    return
+
   ?foe.distance <= 10
     ?BladeSkill()
       return
@@ -134,6 +139,7 @@ func loc8_boss_0()
       selectEquip(dL1, dL2)
     :
       selectEquip(poison1, dP)
+      
     ?needPoison()
       selectEquip(dP, dI)
     :?needIce()
@@ -162,6 +168,7 @@ func loc8_boss_1()
       selectEquip(dL1, dL2)
     :
       selectEquip(poison1, dP)
+
     ?needPoison()
       selectEquip(dP, dI)
     :?needIce()
@@ -184,8 +191,6 @@ func loc8_boss_1()
 func loc8_boss_2()
   ?foe.distance <= 10
     ?BladeSkill()
-      return
-    ?bardicheSkill()
       return
 
     ?foe = "poison"
@@ -246,10 +251,6 @@ func loc8_boss_3()
     ?bardicheSkill()
       return
 
-    //喝暴擊藥打傷害
-    ?item.potion ! "empty"
-      activate potion
-
     //大鎚技能削減盾量
     ?attackLoop = 2 & timing(32, 12)
       ?hammerSkill()
@@ -274,6 +275,10 @@ func loc8_boss_3()
       selectEquip(dP, dI)
       return
 
+    //喝暴擊藥打傷害
+    ?item.potion ! "empty"
+      activate potion
+
     //哪一對小劍傷害高就用那個
     // selectEquip(poison1, vigor1)
     ?!foe.buffs.GetCount("adaptive_defense_poison")
@@ -285,13 +290,13 @@ func loc8_boss_3()
     :?!foe.buffs.GetCount("adaptive_defense_fire")
       selectEquip(fire1, fire2)
     :?!foe.buffs.GetCount("adaptive_defense_ice")
-      selectEquip(ice1, ic2)
+      selectEquip(ice1, ice2)
 
     //吸血
     // ?!buffs.GetCount("lucky_mult")
     //   ?hp ! maxhp
     //     selectEquip(dL1, dL2)
-    :?hp < 20
+    ?hp < 31
       selectEquip(dL1, dL2)
   :
     bashSkill()

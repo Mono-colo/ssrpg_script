@@ -1,25 +1,26 @@
 import Pets/Fly
 import Pets/Spider
+import Hats/Helmet
 import UI/MindstoneButton
 import UI/BetterInfo2
-var poison1 = "poison sword D -shiny -long *10 +13"
-var poison2 = "poison sword D -shiny -long *10 +8"
+var poison1 = "poison sword D -shiny -long *10 +16/+14"
+var poison2 = "poison sword D -shiny -long *10 +13"
 var vigor1 = "vigor sword D -shiny -long *10 +13"
 var vigor2 = "vigor sword D -shiny -long *10 +9"
-var aether1 = "aether sword D -shiny -long *10 +10"
+var aether1 = "aether sword D -shiny -long *10 +13"
 var aether2 = "aether sword D -shiny -long *10 +9"
-var fire1 = "fire sword D -shiny -long *10 +10"
+var fire1 = "fire sword D -shiny -long *10 +13"
 var fire2 = "fire sword D -shiny -long *10 +8"
 var ice1 = "ice sword D -shiny -long *10 +13"
-var ice2 = "ice sword D -shiny -long *10 +8"
+var ice2 = "ice sword D -shiny -long *10 +11"
 var dP = "poison sword dP -shiny -long *10 +13"
 var dL1 = "vigor sword dL -shiny -long *10 +13"
 var dL2 = "vigor sword dL -shiny -long *10 +10"
 var dI = "ice sword dI -shiny -long *10 +13"
 var poison_wand_1 = "poison wand D -shiny -long *10 "
 var poison_wand_2 = "poison wand D -shiny -long *10 "
-var vigor_wand_1 = "vigor wand D -shiny -long *10 "
-var vigor_wand_2 = "vigor wand D -shiny -long *10 "
+var vigor_wand_1 = "vigor wand D -shiny -long *10 +13"
+var vigor_wand_2 = "vigor wand D -shiny -long *10 +12"
 var aether_wand_1 = "aether wand D -shiny -long *10 "
 var aether_wand_2 = "aether wand D -shiny -long *10 "
 var fire_wand_1 = "fire wand D -shiny -long *10 "
@@ -31,16 +32,8 @@ var cross2 = "crossbow *10 +11"
 var poison_heavy_cross = "poison socketed_crossbow shiny *10 +13"
 var fire_heavy_cross = "fire socketed_crossbow shiny *10 +13"
 var ice_heavy_cross = "ice socketed_crossbow shiny *10 +13"
-var poison_hammer1 = "poison hammer D -shiny"
-var poison_hammer2 = "poison hammer D -shiny"
-var vigor_hammer1 = "vigor hammer D -shiny"
-var vigor_hammer2 = "vigor hammer D -shiny"
-var aether_hammer1 = "aether hammer D -shiny"
-var aether_hammer2 = "aether hammer D -shiny"
-var fire_hammer1 = "fire hammer D -shiny"
-var fire_hammer2 = "fire hammer D -shiny"
-var ice_hammer1 = "ice hammer D -shiny"
-var ice_hammer2 = "ice hammer D -shiny"
+var socketed_crossbow = "socketed_crossbow *10 +16/+10"
+var ice_heavy_cross1 = "ice socketed_crossbow shiny *10 +13"
 var ice_hammer3 = "ice hammer D -shiny *10 +7"
 var bardiche = "bardiche *10"
 var heavy = "heavy hammer *10"
@@ -72,6 +65,8 @@ asciiend
 >`10,8,状态:@foe.state@
 >`17,8,时间:@foe.time@
 >`10,9,距离:@foe.distance@
+>`10,10,名字:@foe@
+>`10,11,数量:@foe.count@
 func equip_star_stone()
   ?pickup.distance <= 22
     equipL triskelion
@@ -417,6 +412,13 @@ func nextAttackLoop(loopCount)
  return attackLoop
 func timing(s, t)
  return foe.state=s & foe.time>=t+iceEffect()
+?loc = fungus_forest
+  equip poison socketed_crossbow shiny *10 +13
+  ?foe = boss
+    equipL ice hammer D -shiny *10 +7
+    equipR mask    
+  ?hp<20
+    activate potion
 ?loc = caustic_caves
   aac()
   ?foe.distance > 25
@@ -492,3 +494,176 @@ func loc6_boss_1()
   ?item.potion ! "empty"
     activate potion
   selectEquipT(ice_heavy_cross)
+?loc = rocky_plateau
+  aac()
+  ?foe.distance > 25
+    loc8_run()
+  :?stackPotion
+    ?foe = phase1
+      loc8_boss_1_stackPotion()
+    :?foe = phase2
+      loc8_boss_2_stackPotion()
+    :?foe = phase3
+      loc8_boss_3_stackPotion()
+    :?foe = boss
+      loc8_boss_0_stackPotion()
+    :
+      loc8_attack_stackPotion() 
+  :
+    ?foe = phase1
+      loc8_boss_1()
+    :?foe = phase2
+      loc8_boss_2()
+    :?foe = phase3
+      loc8_boss_3()
+    :?foe = boss
+      loc8_boss_0()
+    :
+      loc8_attack()
+  loc8_main()
+  changeEquip()
+func loc8_main()
+  ?totaltime <= 1
+    loc8_beginAction()
+  :
+    loc8_action()
+func loc8_beginAction()
+  brewPotion(lucky)
+  selectEquip("quest",value_shield)
+  checkStackPotion()
+  bossStart = false
+func loc8_action()
+  ?foe = phase1 & foe.hp ! foe.maxhp
+    bossStart = true
+  ?foe.hp <= 750
+    cinderwispSkill_count(15)
+  ?starPickup()
+    return
+  ?!ai.enabled | ai.paused
+    resetAttackLoop()
+    ?stackPotion
+      selectEquip("quest", "mask")
+    :
+      restoreArmor("quest")
+    return
+func loc8_run()
+  ?quarterstaffSkill()
+    return
+  ?fire_talismanSkill()
+    return
+  ?stackPotion
+    selectEquip("trisk", "mask")
+  :
+    restoreArmor("trisk")
+func loc8_attack()
+  ?foe.count >= 6
+    selectEquipT(socketed_crossbow)
+    return
+  ?foe.distance <= 10
+    ?BladeSkill()
+      return
+    ?hammerSkill()
+      return
+    ?bardicheSkill()
+      return
+    selectEquipT(heavy)
+  :
+    bashSkill()
+  return
+func loc8_boss_0()
+  ?foe.distance <= 10
+    ?BladeSkill()
+      return
+    ?bardicheSkill()
+      return
+    ?maskSkill()
+      return
+    ?hp ! maxhp
+      selectEquip(dL1, dL2)
+    :
+      selectEquip(poison1, dP)
+    ?needPoison()
+      selectEquip(dP, dI)
+    :?needIce()
+      selectEquip(dP, dI)
+  :
+    bashSkill()
+func loc8_boss_1()
+  ?foe.distance <= 10
+    ?BladeSkill()
+      return
+    ?bardicheSkill()
+      return
+    ?hp ! maxhp
+      selectEquip(dL1, dL2)
+    :
+      selectEquip(poison1, dP)
+    ?needPoison()
+      selectEquip(dP, dI)
+    :?needIce()
+      selectEquip(dP, dI)
+  :
+    bashSkill()
+func loc8_boss_2()
+  ?foe.distance <= 10
+    ?BladeSkill()
+      return
+    ?foe = "poison"
+      selectEquip(ice1, ice2)
+    :?foe = "vigor"
+      selectEquip(poison1, poison2)
+    :?foe = "aether"
+      selectEquip(vigor1, vigor2)
+    :?foe = "fire"
+      selectEquip(aether1, aether2)
+    :?foe = "ice"
+      selectEquip(fire1, fire2)
+  :
+    bashSkill()
+func loc8_boss_3()
+  ?(foe.state=32 | foe.state=115) & !foe.time
+    nextAttackLoop(6)
+  ?(foe.state=115 & foe.time > 74 & loc.stars <= 15)
+  ^ | (foe.state=115 & foe.time > 71 & loc.stars > 15)
+    ?mindSkill()
+      return
+    :
+      selectEquip(cross1, cross2)
+      return
+  ?foe.distance <= 10
+    ?BladeSkill()
+      return
+    ?bardicheSkill()
+      return
+    ?attackLoop = 2 & timing(32, 12)
+      ?hammerSkill()
+        return
+    ?attackLoop = 2 & timing(32, 27)
+    ^ & foe.distance < 8
+      mindSkill()
+      return
+    ?attackLoop ! 2 & timing(32, 39)
+      ?maskSkill()
+        return
+      ?needPoison()
+        selectEquip(dP, dI)
+        return
+    ?needIce()
+      selectEquip(dP, dI)
+      return
+    ?item.potion ! "empty"
+      activate potion
+    ?!foe.buffs.GetCount("adaptive_defense_poison")
+      selectEquip(poison1, poison2)
+    :?!foe.buffs.GetCount("adaptive_defense_vigor")
+      selectEquip(vigor1, vigor2)
+    :?!foe.buffs.GetCount("adaptive_defense_aether")
+      selectEquip(aether1, aether2)
+    :?!foe.buffs.GetCount("adaptive_defense_fire")
+      selectEquip(fire1, fire2)
+    :?!foe.buffs.GetCount("adaptive_defense_ice")
+      selectEquip(ice1, ice2)
+    ?hp < 31
+      selectEquip(dL1, dL2)
+  :
+    bashSkill()

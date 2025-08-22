@@ -1,27 +1,132 @@
 // 鬼屋
-
-:?loc = undead_crypt    // 鬼屋
-
+?loc = undead_crypt
+  // 取消后摇
   aac()
-  ?summon_talisman(aether) // 以太
-    loadout 8
 
 
-  // 当生命值低于 30 时激活技能P（使用药水）
-  activate_potion_flow_health(30)
+  // 行走与战斗
+  ?foe.distance > 25
+    loc6_run()
+  :?foe.distance > 23
+    restoreArmor_element()
+  :?stackPotion
+    ?foe = phase1
+      loc6_boss_1_stackPotion()
+    :?foe = boss
+      loc6_boss_0_stackPotion()
+    :
+      loc6_attack_stackPotion() 
+  :
+    ?foe = phase1
+      loc6_boss_1()
+    :?foe = boss
+      loc6_boss_0()
+    :
+      loc6_attack()
+
+  // 开局操作
+  loc6_main()
+
+  // 更换装备
+  changeEquip()
 
 
-  // 堕神之刃
-  // 当blade技能冷却结束且(敌人数量>5或敌人是boss)且物品可激活时,装备堕神之刃并激活R技能
-  active_skill_blade_of_god()
+///////////////////   开局阶段   ///////////////////
+func loc6_main()
+  ?totaltime <= 1
+    loc6_beginAction()
+  :
+    loc6_action()
+/* 開局行動
+ 當第一場開局時可以設定藥水和直接滿甲
+ 並且這時候大部分行動和技能都不能使用
+ 因此這部分獨立執行
+*/
+func loc6_beginAction()
+ //選藥水
+  brewPotion(strength)
 
-  // 面具
-  // 当mask技能冷却结束且面对Boss且距离<25且物品可激活时,装备邪教面具并激活R技能
-  ?loc ! temple
-    active_skill_cult_mask()
+ //第一埸開局會直接滿甲, 記得帶上限最高的盾
+  selectEquip("quest",value_shield)
 
-  // 当无敌人且拾取物距离<=22时切换 星石
-  equip_star_stone()
+  checkStackPotion()
 
-  // 装备采集工具
-  equip_collection_tool()       // 意念之石启动之后,可以持续执行它所收到的指令.
+  bossStart = false
+//行动
+func loc6_action()
+  ?foe = phase1 & foe.hp ! foe.maxhp
+    bossStart = true
+
+  // //火精靈技能(能用就用, 不能用也不要緊)
+  // cinderwispSkill()
+
+  //吸取掉落物
+  ?starPickup()
+    return
+
+  //動畫中回甲
+  ?!ai.enabled | ai.paused
+    //重置循環計算
+    resetAttackLoop()
+
+    ?stackPotion
+      selectEquip("quest", "mask")
+    :
+      restoreArmor("quest")
+
+    return
+///////////////////    行走    ///////////////////
+func loc6_run()
+  // 木棒加速
+  ?quarterstaffSkill()
+    return
+
+  // 召唤火精靈
+  ?fire_talismanSkill()
+  // ?aether_talismanSkill()
+    return
+
+  // 開始疊藥
+  // useStackPotion()
+
+  // 如果在疊藥就拿面具, 否則拿盾回甲
+  ?stackPotion
+    selectEquip("trisk", "mask")
+  :
+    restoreArmor("trisk")
+
+///////////////////    小怪    ///////////////////
+func loc6_attack()
+  ?foe.count > 7
+    ?BladeSkill()
+      return
+  ?foe.distance <= 10
+    selectEquip(vigor_wand_1,vigor_wand_2)
+  :
+    bashSkill()
+
+///////////////////  小 boss  ///////////////////
+func loc6_boss_0()
+  ?BladeSkill()
+    return
+  ?bardicheSkill()
+    return
+  ?hp ! maxhp
+    selectEquip(dL1, dL2)
+  selectEquip(vigor1,vigor2)
+
+
+///////////////////   第1階段   ///////////////////
+func loc6_boss_1()
+  ?BladeSkill()
+    return
+  ?bardicheSkill()
+    return
+  ?maskSkill()
+    return
+
+  //喝暴擊藥打傷害
+  ?item.potion ! "empty"
+    activate potion
+
+  selectEquip(vigor_wand_1,vigor_wand_2)

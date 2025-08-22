@@ -4,6 +4,9 @@
   // 取消后摇
   aac()
 
+  // selectEquip(ice_hammer3, "mask")
+  // activate potion
+
   // 行走与战斗
   ?foe.distance > 25
     loc6_run()
@@ -124,3 +127,4 @@ func loc6_boss_1()
     activate potion
 
   selectEquipT(ice_heavy_cross)
+  // selectEquip(ice_hammer3,ice1)

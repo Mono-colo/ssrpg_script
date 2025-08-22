@@ -1,6 +1,7 @@
 // 导入宠物模块
 import Pets/Fly
 import Pets/Spider
+import Hats/Helmet
 
 // 辅助 UI
 import UI/MindstoneButton
@@ -9,20 +10,20 @@ import UI/BetterInfo2
 
 ///////////////////    武器    ///////////////////
 //属性短剑(附魔攻速,第二附魔暴击)*2     +8, +13, +16, +20
-var poison1 = "poison sword D -shiny -long *10 +13"
-var poison2 = "poison sword D -shiny -long *10 +8"
+var poison1 = "poison sword D -shiny -long *10 +16/+14"
+var poison2 = "poison sword D -shiny -long *10 +13"
 
 var vigor1 = "vigor sword D -shiny -long *10 +13"
 var vigor2 = "vigor sword D -shiny -long *10 +9"
 
-var aether1 = "aether sword D -shiny -long *10 +10"
+var aether1 = "aether sword D -shiny -long *10 +13"
 var aether2 = "aether sword D -shiny -long *10 +9"
 
-var fire1 = "fire sword D -shiny -long *10 +10"
+var fire1 = "fire sword D -shiny -long *10 +13"
 var fire2 = "fire sword D -shiny -long *10 +8"
 
 var ice1 = "ice sword D -shiny -long *10 +13"
-var ice2 = "ice sword D -shiny -long *10 +8"
+var ice2 = "ice sword D -shiny -long *10 +11"
 
 //毒 dP 短剑 *10 +21
 var dP = "poison sword dP -shiny -long *10 +13"
@@ -38,8 +39,8 @@ var dI = "ice sword dI -shiny -long *10 +13"
 var poison_wand_1 = "poison wand D -shiny -long *10 "
 var poison_wand_2 = "poison wand D -shiny -long *10 "
 
-var vigor_wand_1 = "vigor wand D -shiny -long *10 "
-var vigor_wand_2 = "vigor wand D -shiny -long *10 "
+var vigor_wand_1 = "vigor wand D -shiny -long *10 +13"
+var vigor_wand_2 = "vigor wand D -shiny -long *10 +12"
 
 var aether_wand_1 = "aether wand D -shiny -long *10 "
 var aether_wand_2 = "aether wand D -shiny -long *10 "
@@ -54,6 +55,7 @@ var ice_wand_2 = "ice wand D -shiny -long *10 "
 var cross1 = "crossbow *10 +12"
 var cross2 = "crossbow *10 +11" 
 
+
 // 属性重弩(附魔暴击,第二附魔为攻速)
 var poison_heavy_cross = "poison socketed_crossbow shiny *10 +13"
 //var vigor_heavy_cross = "vigor socketed_crossbow"
@@ -61,22 +63,27 @@ var poison_heavy_cross = "poison socketed_crossbow shiny *10 +13"
 var fire_heavy_cross = "fire socketed_crossbow shiny *10 +13"
 var ice_heavy_cross = "ice socketed_crossbow shiny *10 +13"
 
+var socketed_crossbow = "socketed_crossbow *10 +16/+10"
+
+// 减速冰冻重弩(附魔穿刺,第二附魔为攻速)
+var ice_heavy_cross1 = "ice socketed_crossbow shiny *10 +13"
+
 // 破甲用属性战锤(附魔破甲,第二附魔为D)*2
 // 也可以用来打弱眩晕的 loc6_boss0, loc7_boss1
-var poison_hammer1 = "poison hammer D -shiny"
-var poison_hammer2 = "poison hammer D -shiny"
-
-var vigor_hammer1 = "vigor hammer D -shiny"
-var vigor_hammer2 = "vigor hammer D -shiny"
-
-var aether_hammer1 = "aether hammer D -shiny"
-var aether_hammer2 = "aether hammer D -shiny"
-
-var fire_hammer1 = "fire hammer D -shiny"
-var fire_hammer2 = "fire hammer D -shiny"
-
-var ice_hammer1 = "ice hammer D -shiny"
-var ice_hammer2 = "ice hammer D -shiny"
+//var poison_hammer1 = "poison hammer D -shiny"
+//var poison_hammer2 = "poison hammer D -shiny"
+//
+//var vigor_hammer1 = "vigor hammer D -shiny"
+//var vigor_hammer2 = "vigor hammer D -shiny"
+//
+//var aether_hammer1 = "aether hammer D -shiny"
+//var aether_hammer2 = "aether hammer D -shiny"
+//
+//var fire_hammer1 = "fire hammer D -shiny"
+//var fire_hammer2 = "fire hammer D -shiny"
+//
+//var ice_hammer1 = "ice hammer D -shiny"
+//var ice_hammer2 = "ice hammer D -shiny"
 
 // 属性用属性战锤(附魔D,第二附魔为攻速)*2
 var ice_hammer3 = "ice hammer D -shiny *10 +7"
@@ -103,4 +110,4 @@ var fire_shield_A = "fire shield A"
 var ice_shield_A = "ice shield A"
 
 import Mys/MyScript
-import Weapons/loc_6_caustic_caves   
+import Weapons/loc_8_rocky_plateau   
